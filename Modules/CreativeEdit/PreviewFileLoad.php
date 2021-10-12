@@ -75,5 +75,14 @@ if (isset($_FILES[$input_name])) {
 			echo '<p class="error">' . $error . '</p>';
 		}
 	}
+
+		// Изменяем размер изображения
+		$thumb = new Imagick();
+		$thumb->readImage($path."preview.jpg");	
+		$thumb->thumbnailImage(1024, 1024, true, false); // Настройки выходного изображения
+		$thumb->writeImage($path."preview.jpg");
+		$thumb->clear();
+		$thumb->destroy(); 
+	
 }
 ?>
