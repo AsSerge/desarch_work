@@ -44,7 +44,7 @@ function GetCreativesCount($pdo, $task_id, $user_id){
 			echo "<td>{$task['customer_name']} [{$task['customer_type']}]</td>";
 			echo "<td>{$task['task_name']}</td>";
 			// echo "<td><span id='MyCountSrc{$task['task_id']}'><a href = '/index.php?module=CreativeList'>Мои креативы: ".GetCreativesCount($pdo, $task['task_id'], $user_id)['user']."</a> / Всего в задаче: ".GetCreativesCount($pdo, $task['task_id'], $user_id)['all']."</span></td>";
-			echo "<td><span id='MyCountSrc{$task['task_id']}'><a href = '/index.php?module=CreativeList'>Мои креативы: <span class='badge badge-primary badge-pill'>".GetCreativesCount($pdo, $task['task_id'], $user_id)['user']."</span></a> / Всего в задаче: <span class='badge badge-primary badge-pill'>".GetCreativesCount($pdo, $task['task_id'], $user_id)['all']."</span></td>";
+			echo "<td><span id='MyCountSrc{$task['task_id']}'><a href = '/index.php?module=CreativeList&task_id={$task['task_id']}'>Мои креативы: <span class='badge badge-primary badge-pill'>".GetCreativesCount($pdo, $task['task_id'], $user_id)['user']."</span></a> / Всего в задаче: <span class='badge badge-primary badge-pill'>".GetCreativesCount($pdo, $task['task_id'], $user_id)['all']."</span></td>";			
 			echo "<td>";
 			echo "<a href = '/Modules/CreativeEdit/сreative_edit.php' data-toggle='modal' data-target='#AddCreative' data-task='{$task['task_id']}' class = 'AddNewCreative'><i class='far fa-plus-square'></i> Добавить креатив</a>";
 			echo "</td>";

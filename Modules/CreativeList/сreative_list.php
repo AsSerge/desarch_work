@@ -9,9 +9,15 @@
 <div class="my-3 p-3 bg-white rounded box-shadow">
 <?php
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
+
+$task_id = $_GET['task_id'];
+
+// $task_id = "1";
+
 // Получаем список заданий на разработку (Креативов) для данного дизайнера
-	$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) WHERE C.user_id = ?");
-	$stmt->execute(array($user_id));
+	$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) WHERE C.user_id = ? AND T.task_id = ?");
+	$stmt->execute(array($user_id, $task_id));
+
 	$creatives = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 	// echo "<pre>";
@@ -33,8 +39,7 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функци�
 		$count = $stmt->fetchColumn();
 		return $count; 
 	}
-?>	
-
+?>
 
 
 <table class='table table-sm table-light-header' id='CR_CreativeList'>
