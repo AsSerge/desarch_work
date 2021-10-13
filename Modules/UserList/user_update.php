@@ -23,16 +23,17 @@ if(isset($_POST['update_user'])){
 
 		$stmt = $pdo->prepare("SELECT user_login, user_name FROM users WHERE user_id = ?");
 		$stmt->execute(array($user_id));	
-		$mail = $stmt->fetch(PDO::FETCH_ASSOC);
-		$mail = $mail['user_login'];
-		$user_name = $mail['user_name'];
+		$arr = $stmt->fetch(PDO::FETCH_ASSOC);
+
+		$m_mail = $arr['user_login'];
+		$m_name = $arr['user_name'];
 
 		$subject = 'Ваш новый пароль';
-		$message = "Добрый день {$user_name}. Ваш новый пароль: ".$_POST['user_password'];
+		$message = "Добрый день {$m_name}. Ваш новый пароль: ".$_POST['user_password'];
 		$sender_mail = 'Tsvetkov-SA@grmp.ru';
 		$sender_name = 'Администратор';
 
-		SendMailGRMP($mail, $subject, $message, $sender_mail, $sender_name);
+		SendMailGRMP($m_mail, $subject, $message, $sender_mail, $sender_name);
 		}
 		
 	}else{
@@ -45,5 +46,4 @@ if(isset($_POST['update_user'])){
 		$stmt = $pdo->prepare("UPDATE users SET `user_superior` = ? WHERE `user_id` = ?");
 		$stmt->execute(array($user_superior, $user_id));
 	}
-}
 ?>
