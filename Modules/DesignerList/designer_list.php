@@ -26,6 +26,11 @@ function CheckDesignerCreatives($pdo, $user_id){
 // print_r($designers);
 // echo "</pre>";
 ?>
+
+<div class="row">
+	
+</div>
+
 <table class="table table-striped table-sm">
 	<tr><th>ID</th><th>Дизайнер</th><th>Руководитель</th><th>Всего креативов принято</th></tr>
 	<?php

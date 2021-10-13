@@ -10,6 +10,30 @@ if(isset($_POST['update_user'])){
 
 		$stmt = $pdo->prepare("UPDATE users SET `user_password` = ?, `user_hash` = ? WHERE `user_id` = ?");
 		$stmt->execute(array($user_password, "", $user_id));
+
+		// Отправляем новый пароль по почте	
+		// Отправитель: Администратор системы. Список получателей формируется из списка дизайнеров
+
+		include_once($_SERVER['DOCUMENT_ROOT'].'/Assets/PHPMailer/PHPMailerFunction.php');
+		// $mail - Адрес получателя
+		// $subject - Тема сообщения
+		// $message - Сообщение
+		// $sender_mail - Почта отправителя
+		// $sender_name - Имя отправителя
+
+		$stmt = $pdo->prepare("SELECT user_login, user_name FROM users WHERE user_id = ?");
+		$stmt->execute(array($user_id));	
+		$mail = $stmt->fetch(PDO::FETCH_ASSOC);
+		$mail = $mail['user_login'];
+		$user_name = $mail['user_name'];
+
+		$subject = 'Ваш новый пароль';
+		$message = "Добрый день {$user_name}. Ваш новый пароль: ".$_POST['user_password'];
+		$sender_mail = 'Tsvetkov-SA@grmp.ru';
+		$sender_name = 'Администратор';
+
+		SendMailGRMP($mail, $subject, $message, $sender_mail, $sender_name);
+		}
 		
 	}else{
 		echo "Пароль не меняется";
@@ -20,8 +44,6 @@ if(isset($_POST['update_user'])){
 		$user_superior = $_POST['user_superior'];
 		$stmt = $pdo->prepare("UPDATE users SET `user_superior` = ? WHERE `user_id` = ?");
 		$stmt->execute(array($user_superior, $user_id));
-	}	
+	}
 }
-
-
 ?>

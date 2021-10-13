@@ -387,8 +387,9 @@
 										$str_data = mysql_to_date(explode(" ", $cmt['creative_comment_update'])[0]);
 										$str_time = explode(" ", $cmt['creative_comment_update'])[1];
 										$commentcolor = ($cmt['creative_comment_focus'] == 'positive') ? 'positiveComment' : 'negativeComment';
+										$cardtitle = ($cmt['creative_comment_focus'] == 'positive') ? 'Одобрено' : 'Доработка';
 										echo "<div class='OneComment {$commentcolor} shadow p-3 mb-3 rounded'>";
-										echo "<i class='far fa-envelope-open'></i>&nbsp;<b>Сообщение</b><hr>";
+										echo "<i class='far fa-envelope-open'></i>&nbsp;<b>{$cardtitle}</b><hr>";
 										echo "{$cmt['creative_comment_content']}<hr><span class='CommentSignature'>{$cmt['user_name']}&nbsp;{$cmt['user_surname']}&nbsp;|&nbsp;{$str_data}&nbsp;{$str_time}</span>";
 										echo "</div>";
 									}

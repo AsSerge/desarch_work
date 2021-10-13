@@ -110,7 +110,7 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функци�
 		if($myKey != 1){
 			$myKeyCNT = GetGradesOnCount($pdo, $cr['creative_id']);
 			echo "<div class='card m-2 {$color_scheme}'>";
-			echo "	<a href = '/index.php?module=RatingEdit&creative_id={$cr['creative_id']}'><img class='card-img-top' src='/Creatives/{$cr['creative_id']}/preview.jpg' alt=''></a>";
+			echo "	<a href = '/index.php?module=RatingEdit&creative_id={$cr['creative_id']}'><img class='card-img-top' src='/Creatives/{$cr['creative_id']}/preview.jpg?ver=".time()."' alt=''></a>";
 			echo "	<div class='card-body'>";
 			echo "		<p class='card-text'><strong>Дизайн: </strong>[{$cr['creative_id']}] {$cr['creative_name']}</p>";
 			echo "		<p class='card-text'><strong>Тип: </strong>{$creative_development_type}</p>";

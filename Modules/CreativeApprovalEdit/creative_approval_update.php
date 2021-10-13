@@ -35,47 +35,39 @@ if($creative_grade_pos == "on"){
 		));
 
 }
-// Запись комментариев
-if($_POST['rejectionReason'] != "" AND $_POST['creative_comment_content'] != ""){
-	
+
+// Запись комментариев ПОСТАНОВЩИК ЗАДАЧИ
+if($creative_grade_pos == "on"){	
+	$updated_content = ($creative_comment_content != "") ? "[Креатив принят постановщиком задачи] ". $creative_comment_content : "[Креатив принят постановщиком задачи]";
 	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");
-	$updated_content = "[".$rejectionReason."] ".$creative_comment_content; // Пишем в комментарий причину и суть комментария
+	$stmt->execute(array(
+		'user_id'=>$user_id,
+		'creative_id'=>$creative_id,
+		'creative_comment_content'=>$updated_content,
+		'creative_comment_focus'=>'positive'
+	));
+	$infoTag .= "Принят";
+}elseif($creative_grade_pos == "off"){
+	$updated_content = ($creative_comment_content != "") ? "[".$rejectionReason."] ". $creative_comment_content : "[".$rejectionReason."]";
+	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");
 	$stmt->execute(array(
 		'user_id'=>$user_id,
 		'creative_id'=>$creative_id,
 		'creative_comment_content'=>$updated_content,
 		'creative_comment_focus'=>'negative'
 	));
-	
-	$infoTag .= " Записали комментарий";
-
-}elseif($_POST['rejectionReason'] == "" AND $_POST['creative_comment_content'] != ""){
-
-	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");	
+	$infoTag .= "Отправлен на дорпаботку";
+}elseif($creative_grade_pos == "check"){
+	$updated_content = ($creative_comment_content != "") ? "[Креатив отправлен на согласование] ". $creative_comment_content : "[Креатив отправлен на согласование]";
+	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");
 	$stmt->execute(array(
 		'user_id'=>$user_id,
 		'creative_id'=>$creative_id,
-		'creative_comment_content'=>$creative_comment_content,
-		'creative_comment_focus'=>'positive'
+		'creative_comment_content'=>$updated_content,
+		'creative_comment_focus'=>'negative'
 	));
-
-	$infoTag .= " Нет комментария";
+	$infoTag .= "Отправлен на комиссию";
 }
-
-elseif($_POST['rejectionReason'] == "" AND $_POST['creative_comment_content'] == ""){
-	// Автокомментарий при принятии дизайна постановщиком задачи
-	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");	
-	$stmt->execute(array(
-		'user_id'=>$user_id,
-		'creative_id'=>$creative_id,
-		'creative_comment_content'=>'Дизайн принят постановщиком задачи.',
-		'creative_comment_focus'=>'positive'
-	));
-
-	$infoTag .= " Автокомментарий";
-}
-
-
 echo ">> ".$infoTag;
 
 ?>

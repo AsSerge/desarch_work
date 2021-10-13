@@ -71,7 +71,7 @@ $cr_files = GetImagesArr(CREATIVE_FOLDER, $creative_id);
 	<div class="col-md-4 mb-2">
 		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="far fa-images"></i> Креатив</h6>
 		<div class=' preview_img'>
-			<div class='oneimage' big-image='/Creatives/<?=$creative_id?>/preview.jpg'><img src='/Creatives/<?=$creative_id?>/preview.jpg' alt = ''></div>
+			<div class='oneimage' big-image='/Creatives/<?=$creative_id?>/preview.jpg?ver=<?=time()?>'><img src='/Creatives/<?=$creative_id?>/preview.jpg?ver=<?=time()?>' alt = ''></div>
 		</div>
 	</div>
 	<div class="col-md-4 mb-2">
