@@ -1,7 +1,7 @@
 <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
 			<span style="margin-right: 10px"><i class="fas fa-drafting-compass" style="font-size: 2.5rem;"></i></span>
 			<div class="lh-100">
-				<h6 class="mb-0 text-white lh-100">Список дизайнеров</h6>
+				<h6 class="mb-0 text-white lh-100">Dashboard</h6>
 				<small><?php echo $user_name." " .$user_surname. " [".$user_role_description."]";?></small>
 			</div>
 </div>
@@ -31,7 +31,6 @@ function CheckDesignerTasks($pdo, $user_id){
 	return $stmt->rowCount();
 }
 
-
 // Задачи
 // Получаем список всех задач
 $stmt = $pdo->prepare("SELECT * FROM tasks WHERE 1");
@@ -46,33 +45,76 @@ function CheckTaskCreatives($pdo, $task_id){
 }
 
 
-// Креативы 
-// Получаем список креативов
-$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE 1");
-$stmt->execute();
-$creatives = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Функция формирования блока хэшей
-function GetHashList($hash_string){
-	if($hash_string != ""){
-		$hash_arry = explode("|", $hash_string);
-		$hash_html = "<div class = 'TagsList'>";
-		foreach($hash_arry as $hash){
-			$hash_html .= "<span class = 'OneTag'>".$hash."</span>";
-		}
-		$hash_html .= "</div>";
-	}
-	return $hash_html;
-}
-
 // Дизайны
 // Получаем список загруженных дизайнов
 $stmt = $pdo->prepare("SELECT * FROM designes WHERE 1");
 $stmt->execute();
 $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Заказчики
+// Получаем список заказчиков с количеством задач
+$stmt = $pdo->prepare("SELECT DISTINCT customer_id FROM tasks WHERE 1");
+$stmt->execute();
+$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Функция получение информации о заказчике
+function GetCustomerInfo($pdo, $customer_id){
+	$stmt = $pdo->prepare("SELECT customer_name, customer_type FROM customers WHERE customer_id = ?");
+	$stmt->execute(array($customer_id));
+	return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// Функция получение количества задач, разрабатываемых для Каждого заказчика
+function GetTasksCount($pdo, $customer_id){
+	$stmt = $pdo->prepare("SELECT customer_id FROM tasks WHERE customer_id = ?");
+	$stmt->execute(array($customer_id));	
+	return $stmt->rowCount();
+}
+
+// Комиссия
+// Получаем список членов комиссии
+$stmt = $pdo->prepare("SELECT user_login, user_name,user_surname FROM users WHERE user_role = 'ctr'");
+$stmt->execute();
+$members = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <style>
+
+/* Настройка полосы прокрутки для блоков */
+.dash_item__body::-webkit-scrollbar-button {
+background-image:url('');
+background-repeat:no-repeat;
+width:5px;
+height:0px
+}
+
+.dash_item__body::-webkit-scrollbar-track {
+background-color:#ecedee
+}
+
+.dash_item__body::-webkit-scrollbar-thumb {
+-webkit-border-radius: 0px;
+border-radius: 0px;
+background-color:#6dc0c8;
+}
+
+.dash_item__body::-webkit-scrollbar-thumb:hover{
+background-color:#56999f;
+}
+
+.dash_item__body::-webkit-resizer{
+background-image:url('');
+background-repeat:no-repeat;
+width:4px;
+height:0px
+}
+
+.dash_item__body::-webkit-scrollbar{
+width: 4px;
+}
+
+
 .dash_item{
 	border: 1px solid var(--info);
 	font-size: 0.8rem;
@@ -88,9 +130,9 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	overflow: auto;
 }
 .MyTd{
-		cursor: pointer;
-		text-align: center;
-		box-sizing: padding-box;
+	cursor: pointer;
+	text-align: center;
+	box-sizing: padding-box;
 	}
 .MyTd:HOVER{	
 	color: white;
@@ -113,7 +155,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	height: 1.2rem;
 	border-radius: 0.6rem;
 	color: white;
-	background-color: rgb(33, 201, 201);
+	background-color: var(--info);
 	cursor: pointer;
 }
 .sub_menu{
@@ -170,6 +212,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 				<?php
 					foreach($tasks as $tsk){
 						echo "<tr>";
+						echo "<td>{$tsk['task_number']}</td>";
 						echo "<td><a href = '/index.php?module=TaskEdit&task_id={$tsk['task_id']}'>".$tsk['task_name']."</a></td>";
 						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='Всего креативов'>".CheckTaskCreatives($pdo, $tsk['task_id'])."</td>";
 						echo "</tr>";
@@ -183,7 +226,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		<div class="col-md-4 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
+				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Принятые креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
 				</div>
 				<div class="dash_item__body">
 					<div id="CreativesList"></div>
@@ -191,10 +234,11 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			</div>
 		</div>
 
+
 		<div class="col-md-4 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-drafting-compass"></i></i> Дизайны
+				<i class="fas fa-drafting-compass"></i></i> Загруженные дизайны
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
@@ -203,6 +247,47 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 						echo "<tr>";
 						echo "<td>".$des['design_name']."</td>";
 						echo "<td>".$des['design_creative_style']."</td>";
+						echo "</tr>";
+					}
+					?>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-3">
+			<div class="dash_item rounded box-shadow">
+				<div class="dash_item__head">
+				<i class="fas fa-users-cog"></i></i> Заказчики
+				</div>
+				<div class="dash_item__body">
+				<table class="table table-sm">
+				<?php
+					foreach($customers as $cst){
+						echo "<tr>";
+						echo "<td>".GetCustomerInfo($pdo, $cst['customer_id'])['customer_name']."</td>";
+						echo "<td>".GetCustomerInfo($pdo, $cst['customer_id'])['customer_type']."</td>";
+						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='Всего задач'>".GetTasksCount($pdo, $cst['customer_id'])."</td>";
+						echo "</tr>";
+					}
+					?>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-4 mb-3">
+			<div class="dash_item rounded box-shadow">
+				<div class="dash_item__head">
+				<i class="fas fa-balance-scale-right"></i></i> Комиссия
+				</div>
+				<div class="dash_item__body">
+				<table class="table table-sm">
+				<?php
+					foreach($members as $mbr){
+						echo "<tr>";
+						echo "<td>".$mbr['user_name']."&nbsp;".$mbr['user_surname']."</td>";
+						echo "<td><a href = 'mailto:".$mbr['user_login']."'>".$mbr['user_login']."</a></td>";
 						echo "</tr>";
 					}
 					?>
