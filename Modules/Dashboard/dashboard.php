@@ -112,10 +112,14 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 	padding: 0 10px;
 	height: 1.2rem;
 	border-radius: 0.6rem;
+	color: white;
 	background-color: rgb(33, 201, 201);
 	cursor: pointer;
 }
-
+.sub_menu{
+	float: right;
+	cursor: pointer;
+}
 </style>
 
 
@@ -159,7 +163,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		<div class="col-md-4 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-list-ul"></i> Задачи	
+				<span><i class="fas fa-list-ul"></i> Задачи</span><span style='float: right'></span>
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
@@ -179,20 +183,10 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		<div class="col-md-4 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-swatchbook"></i> Креативы	
+				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
 				</div>
 				<div class="dash_item__body">
-				<table class="table table-sm">
 					<div id="CreativesList"></div>
-					<?php
-					// foreach($creatives as $crt){
-					// 	echo "<tr>";
-					// 	echo "<td>".$crt['creative_name']."</td>";
-					// 	echo "<td>".GetHashList($crt['creative_hash_list'])."</td>";
-					// 	echo "</tr>";
-					// }
-					?>
-					</table>
 				</div>
 			</div>
 		</div>

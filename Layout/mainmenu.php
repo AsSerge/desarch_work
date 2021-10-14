@@ -71,7 +71,7 @@
 					<a class="dropdown-item" href="/index.php?module=UserRegistration">Регистрация пользователя</a>
 					<a class="dropdown-item" href="/index.php?module=TaskList">Список задач</a>
 					<a class="dropdown-item" href="/index.php?module=CustomerList">Список заказчиков</a>
-					<a class="dropdown-item" href="/index.php?module=DesignerList">Список дизайнеров</a>
+					<a class="dropdown-item" href="/index.php?module=Dashboard">Dashboard</a>
 					</div>
 				</li>
 

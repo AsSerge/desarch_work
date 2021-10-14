@@ -40,9 +40,9 @@
 							$link = '/Modules/HelpDesk/help_desk.php';
 							$js_local_source = '/Modules/HelpDesk/help_desk.js';
 							break;
-					case 'DesignerList':
-							$link = '/Modules/DesignerList/designer_list.php';
-							$js_local_source = '/Modules/DesignerList/designer_list.js';
+					case 'Dashboard':
+							$link = '/Modules/Dashboard/dashboard.php';
+							$js_local_source = '/Modules/Dashboard/dashboard.js';
 							break;	
 					default:
 							$link = '/Modules/UserList/user_list.php';
