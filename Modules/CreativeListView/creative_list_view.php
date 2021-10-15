@@ -40,12 +40,10 @@ $creative_id = $_GET['creative_id'];
 		$count = $stmt->fetchColumn();
 		return $count; 
 	}
-
-
 ?>	
 
-<table class='table'>
-	<thead><tr><th>#</th><th>Разработка</th><th>Назввание креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Загружено дизайнов</th></tr></thead>
+<table class='table' id="DT_CreativeList">
+	<thead><tr><th>#</th><th>Разработка</th><th>Название креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Загружено дизайнов</th></tr></thead>
 	<tbody>
 		<?php
 		foreach($creatives as $cr){
@@ -56,7 +54,7 @@ $creative_id = $_GET['creative_id'];
 				echo "<td>";
 				if(file_exists('./Creatives/'.$cr['creative_id'].'/preview.jpg')){
 					echo "<img src = './Creatives/{$cr['creative_id']}/preview.jpg' width='200px' class='oneimage' big-image='./Creatives/{$cr['creative_id']}/preview.jpg'>";
-				}				
+				}
 				echo "</td>";
 				echo "<td>";
 				echo $cr['creative_name'];

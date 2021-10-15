@@ -170,15 +170,14 @@ width: 4px;
 
 	<div class="row dash_board">
 
-		<div class="col-md-4 mb-3">
+		<div class="col-md-6 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-user-graduate"></i> Дизайнеры	
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
-				<!-- <tr><th>ID</th><th>Дизайнер</th><th>Принято</th><th>В работе</th><th>На доработке</th><th>На рассмотрении</th><th>На утверждении</th><th>Всего</th><th>Задачи</th></tr> -->
-
+				<tr><th>ID</th><th>Дизайнер</th><th>Принято</th><th>В работе</th><th>На доработке</th><th>На рассмотрении</th><th>На утверждении</th><th>Всего</th><th>Задачи</th></tr>
 				<?php
 					foreach($designers as $dgr){
 						
@@ -201,8 +200,18 @@ width: 4px;
 			</div>
 		</div>
 
+		<div class="col-md-6 mb-3">
+			<div class="dash_item rounded box-shadow">
+				<div class="dash_item__head">
+				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Принятые креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
+				</div>
+				<div class="dash_item__body">
+					<div id="CreativesList"></div>
+				</div>
+			</div>
+		</div>
 
-		<div class="col-md-4 mb-3">
+		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<span><i class="fas fa-list-ul"></i> Задачи</span><span style='float: right'></span>
@@ -223,19 +232,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-4 mb-3">
-			<div class="dash_item rounded box-shadow">
-				<div class="dash_item__head">
-				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Принятые креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
-				</div>
-				<div class="dash_item__body">
-					<div id="CreativesList"></div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="col-md-4 mb-3">
+		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-drafting-compass"></i></i> Загруженные дизайны
@@ -255,7 +252,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-4 mb-3">
+		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-users-cog"></i></i> Заказчики
@@ -276,7 +273,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-4 mb-3">
+		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-balance-scale-right"></i></i> Комиссия
