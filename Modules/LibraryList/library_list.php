@@ -12,8 +12,74 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функци�
 $stmt = $pdo->prepare("SELECT D.design_id, D.design_name, D.design_source_url, D.design_creative_style, D.design_update, U.user_name, U.user_surname  FROM designes as D LEFT JOIN users AS U ON (D.user_id = U.user_id) WHERE 1");
 $stmt->execute();
 $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Функция получения списка файлов, входящих в дизайн и вывода из списком
+function GetFilesList($design_id){
+	$target_folder = DESIGN_FOLDER.$design_id;
+	$files = scandir($target_folder);
+	foreach ($files as $values){
+		// Выводим все файлы, кроме preview.jpg
+		if($values != "." AND $values != ".." AND $values != "preview.jpg"){
+			// Получаем расширение файла для вывода иконки
+			$fi = new SplFileInfo($values);
+			$fe = $fi->getExtension();
+			switch($fe){
+				case 'ai':
+					$fi_img = 'Ai.svg';
+					break;
+				case 'eps':
+					$fi_img = 'Eps.svg';
+					break;
+				case 'gif':
+					$fi_img = 'Gif.svg';
+					break;
+				case 'jpg':
+					$fi_img = 'Jpg.svg';
+					break;
+				case 'jpeg':
+					$fi_img = 'Jpg.svg';
+					break;
+				case 'png':
+					$fi_img = 'Png.svg';
+					break;
+				case 'svg':
+					$fi_img = 'Svg.svg';
+					break;
+				case 'zip':
+					$fi_img = 'Zip.svg';
+					break;
+				case 'cdr':
+					$fi_img = 'Cdr.svg';
+					break;
+				default:
+					$fi_img = 'Fil.svg';
+			}
+
+			$f_size = getimagesize("./Designes/".$design_id."/".$values);
+
+			echo "<tr>";
+			echo "<td width='5%' align='center'><img src='/images/icons/{$fi_img}' width='20px'></td>";
+			echo "<td width='50%'><a href = './Designes/{$design_id}/{$values}' download>".$values."</a></td>";
+			echo "<td width='10%'>".get_file_size(filesize("./Designes/{$design_id}/".$values))."</td>";
+			// echo "<td width='15%'>";
+			// 	if($fe == "jpg"){
+			// 		echo $f_size[0]."px X".$f_size[1]."px";
+			// 	}
+			// echo "</td>";
+			// echo "<td width='15%'>".date("F d Y H:i:s", filemtime("./Designes/{$design_id}/".$values))."</td>";
+			echo "</tr>";
+		}
+	}
+}
+
 ?>
-	<table class='table table-sm table-light-header' id='DT_DesignList'>
+<style>
+	.tableIntable td{
+		font-size: 0.8rem;
+	}
+</style>
+	<!-- <table class='table table-sm table-light-header' id='DT_DesignList'> -->
+	<table class='table table-sm' id='DT_DesignList'>
 	<thead><tr><th>#</th><th>Preview</th><th>Название</th><th>Стиль</th><th>Загрузка</th><th>Источник</th><th>Дата</th></tr></thead>
 	<tbody>
 		<?php
@@ -26,7 +92,12 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 			}
 			echo "</td>";
 			echo "<td>";
-			echo "<a href=''data-toggle='collapse' href='#collapseExample' role='button' aria-expanded='false' aria-controls='collapseExample'>{$ds['design_name']}</a>";
+			
+			echo "<h6><i class='fas fa-drafting-compass'></i> {$ds['design_name']}</h6>";
+			echo "<table class='table table-sm tableIntable'><tbody>";
+			echo GetFilesList($ds['design_id']);
+			echo "</tbody></table>";
+
 			echo "</td>";
 			echo "<td>{$ds['design_creative_style']}</td>";
 			echo "<td>{$ds['user_name']} {$ds['user_surname']}</td>";

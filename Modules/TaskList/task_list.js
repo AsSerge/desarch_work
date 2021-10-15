@@ -29,8 +29,6 @@ $(document).ready(function () {
 		}
 	});
 
-
-
 	// Настройки DatePicker
 	$('.datepicker').datepicker({
 			weekStart: 1,

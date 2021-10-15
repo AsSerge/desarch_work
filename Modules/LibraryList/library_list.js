@@ -10,6 +10,11 @@ $(document).ready(function () {
 			"targets": [0],
 			"visible": false,
 			"searchable": false
+		}, {
+			"targets": [1],
+			"visible": true,
+			"searchable": false,
+			"orderable": false
 		}],
 		"order": [
 			[0, "ASC"]
@@ -19,7 +24,19 @@ $(document).ready(function () {
 			[10, 25, 50, "Все"]
 		],
 		"language": {
-			"url": "/datafiles/dataTables.russian.json"
+			"lengthMenu": "Показывать _MENU_ записей на странице",
+			"zeroRecords": "Извините - ничего не найдено",
+			"info": "Показано _PAGE_ страниц из _PAGES_",
+			"infoEmpty": "Нет подходящих записей",
+			"infoFiltered": "(Отфильтровано из _MAX_ записей)",
+			"sSearch": "Искать: ",
+			"oPaginate": {
+				"sFirst": "Первая",
+				"sLast": "Последняя",
+				"sNext": "Следующая",
+				"sPrevious": "Предыдущая"
+			}
+			// "url": "/datafiles/dataTables.russian.json"
 		}
 	});
 });
