@@ -78,6 +78,10 @@ if($user_role == 'adm'){
 				$link = '/Modules/HelpDesk/help_desk.php';
 				$js_local_source = '/Modules/HelpDesk/help_desk.js';
 				break;
+		case 'LibraryList':
+				$link = '/Modules/LibraryList/library_list.php';
+				$js_local_source = '/Modules/LibraryList/library_list.js';
+				break;
 		default:
 				$link = '/Modules/TaskList/task_list.php';
 				$js_local_source = '/Modules/TaskList/task_list.js';

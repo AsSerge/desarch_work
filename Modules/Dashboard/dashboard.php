@@ -164,11 +164,11 @@ width: 4px;
 }
 
 .console__body{
-	background-color: black;	
+	background-color: var(--dark);	
 }
 .console__body td{
 	font-size: 0.6rem;
-	color: white;	
+	color: var(--light);
 }
 </style>
 
@@ -176,7 +176,7 @@ width: 4px;
 
 	<div class="row dash_board">
 
-		<div class="col-md-6 mb-3">
+		<div class="col-md-12 col-lg-6 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-user-graduate"></i> Дизайнеры	
@@ -206,7 +206,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-6 mb-3">
+		<div class="col-md-12 col-lg-6 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<span id="CreativeFilter"><i class="fas fa-swatchbook"></i> Принятые креативы</span><span id = "all_hash" class='sub_menu'><i class="fas fa-list" data-toggle="tooltip" data-placement="right" title='Очистить фильтр'></i></span>	
@@ -217,7 +217,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-3 mb-3">
+		<div class="col-md-6 col-lg-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<span><i class="fas fa-list-ul"></i> Задачи</span><span style='float: right'></span>
@@ -238,7 +238,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-3 mb-3">
+		<div class="col-md-6 col-lg-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-drafting-compass"></i> Загруженные дизайны
@@ -258,7 +258,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-3 mb-3">
+		<div class="col-md-6 col-lg-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-users-cog"></i> Заказчики
@@ -279,7 +279,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-3 mb-3">
+		<div class="col-md-6 col-lg-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-balance-scale-right"></i> Комиссия
@@ -299,7 +299,7 @@ width: 4px;
 			</div>
 		</div>
 
-		<div class="col-md-6 mb-3">
+		<div class="col-md-12 col-lg-6 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
 				<i class="fas fa-wave-square"></i> Пульс отдела

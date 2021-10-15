@@ -25,6 +25,7 @@
 					<div class="dropdown-menu" aria-labelledby="dropdown01">
 						<a class="dropdown-item" href="/index.php?module=CreativeListView">Список креативов</a>
 						<a class="dropdown-item" href="/index.php?module=TaskList">Список задач</a>
+						<a class="dropdown-item" href="/index.php?module=LibraryList">Список дизайнов</a>
 						<a class="dropdown-item" href="/index.php?module=CustomerList">Список заказчиков</a>
 					</div>
 			</li>

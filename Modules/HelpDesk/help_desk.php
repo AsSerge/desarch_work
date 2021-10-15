@@ -28,10 +28,10 @@
 					<a href="#" class="OneDot" data-source="hd_customers.php">Список заказчиков</a>
 				</div>
 				<div class="m-3">
-					<a href="#" class="OneDot" data-source="hd_tasks.php">Список задач</a>
+					<a href="#" class="OneDot" data-source="hd_tasks.php">Создание задачи</a>
 				</div>
 				<div class="m-3">
-					<a href="#" class="OneDot" data-source="hd_сreatives.php">Список креативов</a>
+					<a href="#" class="OneDot" data-source="hd_сreatives.php">Создание креатива</a>
 				</div>
 				<div class="m-3">
 					<a href="#" class="OneDot" data-source="hd_сreative_grades.php">Разрешение на покупку</a>

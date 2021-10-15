@@ -52,7 +52,7 @@ $creative_id = $_GET['creative_id'];
 				echo "</td>";
 				echo "<td>";
 				if(file_exists('./Creatives/'.$cr['creative_id'].'/preview.jpg')){
-					echo "<img src = './Creatives/{$cr['creative_id']}/preview.jpg' width='200px' class='oneimage' big-image='./Creatives/{$cr['creative_id']}/preview.jpg'>";
+					echo "<img src = './Creatives/{$cr['creative_id']}/preview.jpg' width='150px' class='oneimage' big-image='./Creatives/{$cr['creative_id']}/preview.jpg'>";
 				}
 				echo "</td>";
 				echo "<td>";

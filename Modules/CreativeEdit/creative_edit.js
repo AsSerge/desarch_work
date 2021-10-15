@@ -47,7 +47,13 @@ $(document).ready(function () {
 	$(document).on('shown.bs.tab', function () {
 		$('#HashTagsRow').hide();
 	});
-
+	// Сокрытие блока тегов при клике вне этого блока
+	$(document).mouseup(function (e) {
+		var container = $('#HashTagsRow');
+		if (container.has(e.target).length === 0) {
+			container.hide();
+		}
+	});
 
 	// Подлив в базу информации о тегах
 	$('#HashTags').on("change", function () {
@@ -411,33 +417,4 @@ $(document).ready(function () {
 		});
 	});
 
-
-	// ХЭШИ
-
-	// $('#HashWork').on('shown.bs.modal', function (event) {
-	// 	var button = $(event.relatedTarget);
-	// 	console.log('Загрузились');
-	// });
-
-	// $('#HashWorkBtn').on("click", function () {
-	// 	// console.log('Нажали' + c_Id);
-	// 	$.ajax({
-	// 		url: '/Modules/CreativeEdit/get_used_hash.php',
-	// 		type: 'post',
-	// 		datatype: 'html',
-	// 		data: {
-	// 			creative_id: c_Id
-	// 		},
-	// 		success: function (data) {
-	// 			var hash_arr = jQuery.parseJSON(data);
-	// 			if (hash_arr.length > 0) {
-	// 				hash_arr.forEach(function (item) {
-
-	// 					// console.log(sessionStorage.getItem(item));
-
-	// 				});
-	// 			}
-	// 		}
-	// 	});
-	// });
 });
