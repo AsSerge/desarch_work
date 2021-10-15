@@ -3,7 +3,8 @@ $(document).ready(function () {
 	// Заполняем таблицу креативов
 	GetHashForCreative();
 
-	// setInterval(GetHashForCreative, 10000);
+	GetLog();
+	setInterval(GetLog, 5000);
 
 	// Фильтрация креативов по хешу
 	function GetHashForCreative(hash_name) {
@@ -61,6 +62,30 @@ $(document).ready(function () {
 					$('#CreativeFilter').html('<i class="fas fa-swatchbook"></i> Принятые креативы ');
 					GetHashForCreative();
 				});
+			}
+		});
+	}
+
+	function GetLog() {
+		$.ajax({
+			url: '/Modules/Dashboard/pulse.php',
+			success: function (data) {
+
+				var LongLine = "<table class='table table-sm table-borderless console__body'>";
+				var log_arr = jQuery.parseJSON(data);
+				var log_array = Object.entries(log_arr); // Преобразуем Объект в массив для перебора
+				if (log_array.length >= 1) {
+					log_array.forEach(function (item) {
+						LongLine += "<tr>";
+						LongLine += "<td>" + item[1]['log_datetime'] + "</td>";
+						LongLine += "<td>" + item[1]['user_name'] + " " + item[1]['user_surname'] + "</td>";
+						LongLine += "<td>" + item[1]['creative_name'] + "</td>";
+						LongLine += "<td>" + item[1]['log_content'] + "</td>";
+						LongLine += "</tr>";
+					});
+				}
+				LongLine += "</table>";
+				$('#Pulse').html(LongLine);
 			}
 		});
 	}

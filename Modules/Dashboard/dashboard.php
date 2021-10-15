@@ -162,9 +162,15 @@ width: 4px;
 	float: right;
 	cursor: pointer;
 }
+
+.console__body{
+	background-color: black;	
+}
+.console__body td{
+	font-size: 0.6rem;
+	color: white;	
+}
 </style>
-
-
 
 <div class="my-3 p-3 bg-white rounded box-shadow">
 
@@ -235,7 +241,7 @@ width: 4px;
 		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-drafting-compass"></i></i> Загруженные дизайны
+				<i class="fas fa-drafting-compass"></i> Загруженные дизайны
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
@@ -255,7 +261,7 @@ width: 4px;
 		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-users-cog"></i></i> Заказчики
+				<i class="fas fa-users-cog"></i> Заказчики
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
@@ -276,7 +282,7 @@ width: 4px;
 		<div class="col-md-3 mb-3">
 			<div class="dash_item rounded box-shadow">
 				<div class="dash_item__head">
-				<i class="fas fa-balance-scale-right"></i></i> Комиссия
+				<i class="fas fa-balance-scale-right"></i> Комиссия
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
@@ -292,6 +298,18 @@ width: 4px;
 				</div>
 			</div>
 		</div>
+
+		<div class="col-md-6 mb-3">
+			<div class="dash_item rounded box-shadow">
+				<div class="dash_item__head">
+				<i class="fas fa-wave-square"></i> Пульс отдела
+				</div>
+				<div class="dash_item__body console__body">
+					<div id="Pulse"></div>
+				</div>
+			</div>
+		</div>
+
 
 
 
