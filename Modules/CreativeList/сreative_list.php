@@ -13,14 +13,18 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функци�
 $task_id = $_GET['task_id'];
 
 // Получаем список заданий на разработку (Креативов) для данного дизайнера
-	$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) WHERE C.user_id = ? AND T.task_id = ?");
-	$stmt->execute(array($user_id, $task_id));
 
-	$creatives = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	if($task_id != ""){
+		$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) WHERE C.user_id = ? AND T.task_id = ?");
+		$stmt->execute(array($user_id, $task_id));
+		$creatives = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
+	else{
+		$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) WHERE C.user_id = ?");
+		$stmt->execute(array($user_id));
+		$creatives = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	}
 
-	// echo "<pre>";
-	// print_r($creatives);
-	// echo "</pre>";
 
 	// Функция определения параметров заказчика
 	function Customer($pdo, $customer_id){

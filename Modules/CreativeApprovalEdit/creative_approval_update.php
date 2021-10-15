@@ -19,21 +19,21 @@ if($creative_grade_pos == "on"){
 		'creative_end_date'=>$creative_end_date,
 		'creative_id'=>$creative_id
 		));
-
+		WriteLog($pdo, $creative_id, $user_id, "Креатив принят");// Запись лога
 }elseif($creative_grade_pos == "off"){
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status WHERE creative_id = :creative_id");
 	$stmt->execute(array(
 		'creative_status'=>'На доработке',
 		'creative_id'=>$creative_id
 		));
-
+		WriteLog($pdo, $creative_id, $user_id, "Креатив отпрален на доработку");// Запись лога
 }elseif($creative_grade_pos == "check"){
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status WHERE creative_id = :creative_id");
 	$stmt->execute(array(
 		'creative_status'=>'На утверждении',
 		'creative_id'=>$creative_id
 		));
-
+		WriteLog($pdo, $creative_id, $user_id, "Креатив отпрвален на комиссию");// Запись лога
 }
 
 // Запись комментариев ПОСТАНОВЩИК ЗАДАЧИ

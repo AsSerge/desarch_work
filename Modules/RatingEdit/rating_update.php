@@ -37,6 +37,7 @@ function GetGradesOnCount($pdo, $creative_id){
 			'b'=>$today,
 			'c'=>$creative_id
 		));
+		// WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена");// Запись лога
 	}
 }
 
@@ -58,6 +59,9 @@ if ($creative_status == "На утверждении"){
 				'creative_id'=>$creative_id,
 				'user_id'=>$user_id
 			));
+
+			WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена членом комиссии");// Запись лога
+
 			$infoTag = "Обновили";
 
 			// Проверяем количество положительных оценок за креатив. Если оно равно 4 - креативу присваевается статус "Принят"
@@ -73,6 +77,7 @@ if ($creative_status == "На утверждении"){
 				'a'=>'На доработке',
 				'b'=>$creative_id
 			));
+			WriteLog($pdo, $creative_id, $user_id, "Креатив отправлен на доработку");// Запись лога
 		}
 
 	}else{
@@ -85,8 +90,9 @@ if ($creative_status == "На утверждении"){
 				'creative_grade_pos'=>$creative_grade_pos
 			));
 			$infoTag = "Добавили";
-			// Проверяем количество положительных оценок за креатив. Если оно равно 4 - креативу присваевается статус "Принят"
+			// Проверяем количество положительных оценок за креатив. Если оно равно 3 - креативу присваевается статус "Принят"
 			GetGradesOnCount($pdo, $creative_id);
+			WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена");// Запись лога
 		}else{
 			// Если креатив Отклоняется членом комиссииии - ВСЕ результаты голосования по нему обнуляются и креативу присваиваеися статус "На доработке"
 			$stmt = $pdo->prepare("DELETE FROM сreative_grades WHERE creative_id = ?");
@@ -98,6 +104,7 @@ if ($creative_status == "На утверждении"){
 				'a'=>'На доработке',
 				'b'=>$creative_id
 			));
+			WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена членом комиссии");// Запись лога
 		}
 
 	}

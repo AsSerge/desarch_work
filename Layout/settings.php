@@ -46,7 +46,8 @@ $array_creative_magnitude = array(
 // Источники вдохновения
 $array_creative_source = array(
 	'www.depositphotos.com',
-	'www.freepik.com'
+	'www.freepik.com',
+	'Собственная разработка'
 );
 
 $rejectionReason = array(
@@ -93,5 +94,13 @@ function get_file_size($bytes){
 	}
 }
 
-
+// Запись логов
+function WriteLog($pdo, $creative_id, $user_id, $log_content){
+	$stmt = $pdo->prepare("INSERT INTO base_logs SET creative_id = :creative_id, user_id = :user_id, log_content = :log_content");
+	$stmt->execute(array(
+		'creative_id'=>$creative_id,
+		'user_id'=>$user_id,
+		'log_content'=>$log_content
+	));
+}
 ?>

@@ -6,6 +6,18 @@
 			</div>
 </div>
 
+<style>
+	.MyAtt span{
+		font-weight: 600;
+		color: var(--red);
+		cursor: pointer;
+	}
+
+	.MyAtt span:AFTER{
+		content: "*";
+		color: var(--red);
+	}
+</style>
 <div class="my-3 p-3 bg-white rounded box-shadow">
 
 <?php
@@ -28,14 +40,20 @@ function GetCreativeNumbers($pdo, $task_id, $select_number){
 		case "All":
 			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ?");
 			break;
-		case "Accept":
+		case "Принят":
 			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'Принят'");
 			break;
-		case "Inwork":
+		case "В работе":
 			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'В работе'");
 			break;
-		case "Approve":
+		case "На утверждении":
 			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'На утверждении'");
+			break;
+		case "На рассмотрении":
+			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'На рассмотрении'");
+			break;
+		case "На доработке":
+			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'На доработке'");
 			break;
 	}
 	$stmt->execute(array($task_id));
@@ -48,7 +66,7 @@ if(count($tasks)==0){
 }else{
 	echo "<table class='table table-sm table-light-header' id='DT_TaskList'>";
 
-	echo "<thead><tr><th>#</th><th>#</th><th>Номер</th><th>Заказчик</th><th>Тип</th><th>Название задачи</th><th>Крайний срок</th><th>Креативов всего</th><th>Принято</th><th>В работе</th><th>На утверждении</th><th>Статус</th></tr></thead>";
+	echo "<thead><tr><th>#</th><th>#</th><th>Номер</th><th>Заказчик</th><th>Тип</th><th>Название задачи</th><th>Крайний срок</th><th>Креативов всего</th><th>Принято</th><th>В работе</th><th>На комиссии</th><th>На рассмотрении</th><th>На доработке</th></tr></thead>";
 
 	echo "<tbody>";
 	forEach($tasks as $task){
@@ -61,10 +79,19 @@ if(count($tasks)==0){
 		echo "<td><a href = '/index.php?module=TaskEdit&task_id=".$task['task_id']."'><i class='fas fa-edit'></i>".$task['task_name']."</a></td>";
 		echo "<td>".mysql_to_date($task['task_deadline'])."</td>";
 		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "All")."</td>";
-		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Accept")."</td>";
-		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Inwork")."</td>";
-		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Approve")."</td>";
-		echo "<td>".$task['task_status']."</td>";
+		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Принят")."</td>";
+		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "В работе")."</td>";
+		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "На утверждении")."</td>";
+			if(GetCreativeNumbers($pdo, $task['task_id'], "На рассмотрении") > 0) {
+				$attentionA = 'class="MyAtt"';
+			}
+		echo "<td {$attentionA}><span>".GetCreativeNumbers($pdo, $task['task_id'], "На рассмотрении")."</span></td>";
+			if(GetCreativeNumbers($pdo, $task['task_id'], "На доработке") > 0) {
+				$attentionB = 'class="MyAtt"';
+			}
+		echo "<td {$attentionB}><span>".GetCreativeNumbers($pdo, $task['task_id'], "На доработке")."</span></td>";
+
+		// echo "<td>".$task['task_status']."</td>";
 		// echo "<td><a href = '/index.php?module=TaskEdit&task_id=".$task['task_id']."' class='btn btn-outline-primary btn-sm' type='button'><i class='fas fa-edit'></i></a></td>";
 		echo "</tr>";
 	}
