@@ -6,7 +6,8 @@ if(isset($_POST['update_user'])){
 	// Обработка пароля
 	if (isset($_POST['user_password']) and $_POST['user_password'] != ""){
 		$user_id = $_POST['user_id'];
-		$user_password = md5(md5(trim($_POST['user_password'])));
+		// $user_password = md5(md5(trim($_POST['user_password'])));
+		$user_password = password_hash(trim($_POST['user_password']), PASSWORD_BCRYPT);
 
 		$stmt = $pdo->prepare("UPDATE users SET `user_password` = ?, `user_hash` = ? WHERE `user_id` = ?");
 		$stmt->execute(array($user_password, "", $user_id));

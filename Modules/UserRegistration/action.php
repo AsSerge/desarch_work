@@ -60,7 +60,8 @@ if(isset($_POST['submit']))
 		$user_surname = ClearSQLString($_POST['user_surname']);
 		$user_role = $_POST['user_role'];
 
-		$user_password = md5(md5(trim($_POST['user_password'])));
+		// $user_password = md5(md5(trim($_POST['user_password'])));
+		$user_password = password_hash(trim($_POST['user_password']), PASSWORD_BCRYPT);
 		$stmt = $pdo->prepare("INSERT INTO users SET user_login=".$user_login.", user_password='".$user_password."', user_name='".$user_name."', user_surname='".$user_surname."', user_role='".$user_role."'");
 		$stmt->execute();
 
