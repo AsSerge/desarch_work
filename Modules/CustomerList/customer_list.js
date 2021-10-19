@@ -8,7 +8,7 @@ $(document).ready(function () {
 		var customer_to_edit = button.data('customer-id');
 
 		$.ajax({
-			url: '/Modules/СustomerList/customer_getinfo.php',
+			url: '/Modules/CustomerList/customer_getinfo.php',
 			type: 'POST',
 			dataType: 'html',
 			data: {
@@ -35,7 +35,7 @@ $(document).ready(function () {
 		var customer_description = $("#customer_description").val();
 
 		$.ajax({
-			url: '/Modules/СustomerList/customer_update.php',
+			url: '/Modules/CustomerList/customer_update.php',
 			type: 'POST',
 			dataType: 'html',
 			data: {
@@ -63,7 +63,7 @@ $(document).ready(function () {
 // Удаление заказчика
 function RemoveCustomer(customerToDel) {
 	$.ajax({
-		url: '/Modules/СustomerList/removeCustomer.php',
+		url: '/Modules/CustomerList/removeCustomer.php',
 		type: 'POST',
 		data: {
 			customer_id: customerToDel

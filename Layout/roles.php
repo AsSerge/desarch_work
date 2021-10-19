@@ -16,8 +16,8 @@ if($user_role == 'adm'){
 				$js_local_source = '/Modules/TaskList/task_list.js';
 				break;
 		case 'CustomerList':
-				$link = '/Modules/СustomerList/customer_list.php';
-				$js_local_source = '/Modules/СustomerList/customer_list.js';
+				$link = '/Modules/CustomerList/customer_list.php';
+				$js_local_source = '/Modules/CustomerList/customer_list.js';
 				break;
 		case 'TaskEdit':
 				$link = '/Modules/TaskEdit/task_edit.php';
@@ -31,7 +31,7 @@ if($user_role == 'adm'){
 				$link = '/Modules/LibraryList/library_list.php';
 				$js_local_source = '/Modules/LibraryList/library_list.js';
 				break;
-			case 'CreativeListView':
+		case 'CreativeListView':
 				$link = '/Modules/CreativeListView/creative_list_view.php';
 				$js_local_source = '/Modules/CreativeListView/creative_list_view.js';
 				break;	
@@ -55,8 +55,8 @@ if($user_role == 'adm'){
 				$js_local_source = '/Modules/TaskList/task_list.js';
 				break;
 		case 'CustomerList':
-				$link = '/Modules/СustomerList/customer_list.php';
-				$js_local_source = '/Modules/СustomerList/customer_list.js';
+				$link = '/Modules/CustomerList/customer_list.php';
+				$js_local_source = '/Modules/CustomerList/customer_list.js';
 				break;
 		case 'TaskEdit':
 				$link = '/Modules/TaskEdit/task_edit.php';
@@ -104,7 +104,7 @@ if($user_role == 'adm'){
 }elseif ($user_role == 'dgr'){
 	$module = $_GET['module'];
 	switch($module){
-		case 'CreativeEdit':
+		case 'StdPwd124!':
 				$link = '/Modules/CreativeEdit/сreative_edit.php';
 				$js_local_source = '/Modules/CreativeEdit/creative_edit.js';
 				break;

@@ -6,7 +6,8 @@
 	<main role="main" class="container-fluid">	
 		<?php
 			// Распределение ролей
-			require_once($_SERVER['DOCUMENT_ROOT'].'/Layout/roles.php');
+			// require_once($_SERVER['DOCUMENT_ROOT'].'/Layout/roles.php');
+			require_once($_SERVER['DOCUMENT_ROOT'].'/Layout/roles_new.php');
 			// Подключение контента (скрипты в футер грузим по необходимости)
 			include($_SERVER['DOCUMENT_ROOT'].$link);
 		?>

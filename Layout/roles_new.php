@@ -1,16 +1,14 @@
 <?php
-// Утверждение креатива
-include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
+// Настройка доступов
 
-$role = 'adm';
-$module = 'TaskEdit';
+$module = $_GET['module'];
 
 // Разрешения
 $role_arr = array();
 $role_arr['adm'] = ['UserList', 'UserRegistration', 'TaskList', 'CustomerList', 'TaskEdit', 'LibraryEdit', 'LibraryList', 'CreativeListView', 'Dashboard', 'HelpDesk'];
 $role_arr['mgr'] = ['TaskList', 'CustomerList', 'TaskEdit', 'CreativeApprovalList', 'CreativeApprovalEdit', 'CreativeListView', 'LibraryList', 'HelpDesk'];
 $role_arr['ctr'] = ['RatingEdit', 'RatingList', 'HelpDesk'];
-$role_arr['dgr'] = ['CreativeList', 'LibraryEdit', 'LibraryList', 'TaskListDesigner', 'HelpDesk'];
+$role_arr['dgr'] = ['CreativeList', 'LibraryEdit', 'LibraryList', 'TaskListDesigner', 'CreativeEdit', 'HelpDesk'];
 
 
 // Состав модулей
@@ -40,12 +38,14 @@ $def_arr['mgr'] = ['/Modules/TaskList/task_list.php', '/Modules/TaskList/task_li
 $def_arr['dgr'] = ['/Modules/TaskListDesigner/task_list_dsigner.php', '/Modules/TaskListDesigner/task_list_dsigner.js'];
 $def_arr['ctr'] = ['/Modules/RatingList/rating_list.php', '/Modules/RatingList/rating_list.js'];
 
+
 // Вывод разрешенных значений
-if(in_array($module, $role_arr[$role])){
+if(in_array($module, $role_arr[$user_role])){
 	$link = $module_arr[$module][0];
 	$js_local_source = $module_arr[$module][1];
 }else{
-	$link = $def_arr[$role][0];
-	$js_local_source = $def_arr[$role][1];	
+	$link = $def_arr[$user_role][0];
+	$js_local_source = $def_arr[$user_role][1];	
 }
+
 ?>
