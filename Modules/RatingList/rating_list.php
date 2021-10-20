@@ -34,10 +34,9 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функци�
 
 	// Функция проверки количества положительных оценок за креатив
 	function GetGradesOnCount($pdo, $creative_id){
-		$stmt = $pdo->prepare("SELECT * FROM сreative_grades WHERE creative_id = :creative_id AND creative_grade_pos = :creative_grade_pos");
+		$stmt = $pdo->prepare("SELECT * FROM сreative_grades WHERE creative_id = :creative_id AND creative_grade_pos = 'on' OR creative_grade_pos = 'buy'");
 		$stmt->execute(array(
-			'creative_id'=>$creative_id,
-			'creative_grade_pos'=>'on'
+			'creative_id'=>$creative_id
 		));
 		return $stmt->rowCount(); // Количество положительных оценок 
 	}

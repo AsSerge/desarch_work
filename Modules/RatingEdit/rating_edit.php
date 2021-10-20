@@ -101,13 +101,13 @@ $cr_files = GetImagesArr(CREATIVE_FOLDER, $creative_id);
 		<?php }?>
 
 		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="far fa-images"></i> Блок голосования</h6>
-		<div class="alert alert-warning" id = "FTMyRadio" role="alert">Вам необходимо рассмотреть возможность закупки стоковых изображений. Для этого необходимо кликнуть на переключателе, выбрав <i class="far fa-thumbs-up"></i> (Разрешить покупку) или <i class="far fa-thumbs-down"></i> (Отправить на доработку).<br>Если вы ходтите оставить комметнарий <span class="SetComment"><i class="far fa-comment-dots"></i></span> для дизайнера - впишите его в поле комментариев</div>
+		<div class="alert alert-warning" id = "FTMyRadio" role="alert">Вам необходимо рассмотреть возможность закупки стоковых изображений. Для этого необходимо кликнуть на переключателе, выбрав <i class="fas fa-shopping-cart"></i> (Разрешить покупку) или <i class="far fa-thumbs-up"></i> (Принять без покупки).<br>Если вы ходтите оставить комметнарий <span class="SetComment"><i class="far fa-comment-dots"></i></span> для дизайнера - впишите его в поле комментариев</div>
 		<form action="#">
 
 
 			<div class='p-2' style="text-align: center;">
-				<button id="BtnOn" type="button" class="btn btn-outline-success"><i class="far fa-thumbs-up"></i> Разрешить покупку</button>
-				<button id="BtnOff" type="button" class="btn btn-outline-danger"><i class="far fa-thumbs-down"></i> Отправить на доработку</button>
+				<button id="BtnBuy" type="button" class="btn btn-outline-success"><i class="fas fa-shopping-cart"></i> Разрешить покупку</button>
+				<button id="BtnOn" type="button" class="btn btn-outline-primary"><i class="far fa-thumbs-up"></i> Принять без покупки</button>
 			</div>
 
 
@@ -115,18 +115,6 @@ $cr_files = GetImagesArr(CREATIVE_FOLDER, $creative_id);
 				.rejection{
 				}
 			</style>
-
-			<div class='p-2' id='rejectionReasonBlock'>
-				<label for="rejectionReason">Причина отклонения</label>
-					<select class="form-control form-control-sm rejection" id="rejectionReason" name = "rejectionReason">
-						<option value="">Выберете...</option>
-						<?php
-							foreach ($rejectionReason as $reas){
-									echo "<option value='{$reas}'>{$reas}</option>";
-							}
-						?>
-					</select>
-			</div>
 
 			<div class='p-2' style="text-align: center;">
 				<button id="SetComment" class="btn btn-info btn-sm" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" >Комментарий <i class="far fa-comment-dots"></i></button>

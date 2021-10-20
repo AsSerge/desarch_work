@@ -7,112 +7,66 @@ $user_id = $_POST['user_id'];
 $creative_id = $_POST['creative_id'];
 $creative_grade_pos = $_POST['creative_grade_pos'];
 $creative_comment_content = $_POST['creative_comment_content'];
-$rejectionReason = $_POST['rejectionReason']; // Причина отклонения креатива
 
-
-// Функция провекри позиции ()
-function GetGradesDataCount($pdo, $creative_id, $user_id){
-	$stmt = $pdo->prepare("SELECT * FROM сreative_grades WHERE creative_id = :creative_id AND user_id = :user_id");
-	$stmt->execute(array(
-		'creative_id'=>$creative_id,
-		'user_id'=>$user_id
-	));
-	return $stmt->rowCount();
-}
-
-// Функция проверки количества положительных оценок за креатив. При принятии 3х положительных оценок - креатив - принят: Закупка разрешена
-function GetGradesOnCount($pdo, $creative_id){
-	$stmt = $pdo->prepare("SELECT * FROM сreative_grades WHERE creative_id = :creative_id AND creative_grade_pos = :creative_grade_pos");
-	$stmt->execute(array(
-		'creative_id'=>$creative_id,
-		'creative_grade_pos'=>'on'
-	));
-	$GradesOn = $stmt->rowCount(); // Количество положительных оценок
-	if($GradesOn == 3){
-
-		$today = date('Y-m-d'); // Текущее число
-		$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :a, creative_end_date = :b WHERE creative_id =:c");
-		$stmt->execute(array(
-			'a'=>'Принят',
-			'b'=>$today,
-			'c'=>$creative_id
+// Функция управления статусом креатива
+function SetCreativeStatus($pdo, $creative_id){
+	// Находим дату
+	$creative_end_date = date("Y-m-d");
+	// Получаем массив для голосования
+	$stmt = $pdo->prepare("SELECT creative_grade_pos FROM сreative_grades WHERE creative_id = ?");
+	$stmt->execute(array($creative_id));
+	$grade_array = $stmt->fetchAll(PDO::FETCH_COLUMN);
+	// Если проголосовали ВСЕ три члена комиссии - начинаем рулить статусом
+	if(count($grade_array) >= 3){
+		$grade = array_count_values($grade_array);
+		if($grade['buy'] > $grade['on']){
+			$newstatus = "Покупка";
+		}else{
+			$newstatus = "Принят";
+		}
+		$stmts = $pdo->prepare("UPDATE сreatives SET creative_end_date = :creative_end_date, creative_status = :creative_status WHERE creative_id = :creative_id");
+		$stmts->execute(array(
+			'creative_end_date'=> $creative_end_date,
+			'creative_status' => $newstatus, 
+			'creative_id' => $creative_id
 		));
-		WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена Комиссией");// Запись лога
-	}
-}
+	}	
+};
 
-// Проверка статуса креатива. Можно вносить павки ТОЛЬКО если креатив имеет статус "На утверждении"
 
+// Проверяем статус креатива (должен быть в статусе На утверждении) - только в этом статусе возможно голосование
 $stmt = $pdo->prepare("SELECT creative_status FROM сreatives WHERE creative_id = ?");
 $stmt->execute(array($creative_id));
 $creative_status = $stmt->fetch(PDO::FETCH_COLUMN);
 
+if($creative_status == 'На утверждении'){
+	if($creative_grade_pos == "on"){
+		// $stmt = $pdo->prepare("UPDATE сreative_grades SET creative_grade_pos = :creative_grade_pos WHERE creative_id = :creative_id AND user_id = :user_id");
+		$stmt = $pdo->prepare("INSERT INTO сreative_grades SET creative_grade_pos = :creative_grade_pos, creative_id = :creative_id, user_id = :user_id");
+		$stmt->execute(array(
+			'creative_grade_pos'=>$creative_grade_pos,
+			'creative_id'=>$creative_id,
+			'user_id'=>$user_id
+		));
+		WriteLog($pdo, $creative_id, $user_id, "Креатив принят членом комиссиии без закупки");// Запись лога
+		$infoTag = "Креатива принят членом комиссии без закупки";
 
-if ($creative_status == "На утверждении"){
-	if(GetGradesDataCount($pdo, $creative_id, $user_id) > 0){
-		// Если такая запись существовала - апдейтим ее
-		if($creative_grade_pos == "on"){
-			// Если креатив утверждается членом комиссии
-			$stmt = $pdo->prepare("UPDATE сreative_grades SET creative_grade_pos = :creative_grade_pos WHERE creative_id = :creative_id AND user_id = :user_id");
-			$stmt->execute(array(
-				'creative_grade_pos'=>$creative_grade_pos,
-				'creative_id'=>$creative_id,
-				'user_id'=>$user_id
-			));
-
-			WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена членом комиссии");// Запись лога
-
-			$infoTag = "Обновили";
-
-			// Проверяем количество положительных оценок за креатив. Если оно равно 4 - креативу присваевается статус "Принят"
-			GetGradesOnCount($pdo, $creative_id);
-		}else{
-			// Если креатив Отклоняется членом комиссииии - ВСЕ результаты голосования по нему обнуляются и креативу присваиваеися статус "На доработке"
-			$stmt = $pdo->prepare("DELETE FROM сreative_grades WHERE creative_id = ?");
-			$stmt->execute(array($creative_id));
-			$infoTag = "Удалили!";
-
-			$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :a WHERE creative_id =:b");
-			$stmt->execute(array(
-				'a'=>'На доработке',
-				'b'=>$creative_id
-			));
-			WriteLog($pdo, $creative_id, $user_id, "Креатив отправлен на доработку");// Запись лога
-		}
-
-	}else{
-		// Если нет - создаем
-		if($creative_grade_pos == "on"){
-			$stmt = $pdo->prepare("INSERT INTO сreative_grades SET user_id = :user_id, creative_id = :creative_id, creative_grade_pos = :creative_grade_pos");
-			$stmt->execute(array(
-				'user_id'=>$user_id,
-				'creative_id'=>$creative_id,
-				'creative_grade_pos'=>$creative_grade_pos
-			));
-			$infoTag = "Добавили";
-			WriteLog($pdo, $creative_id, $user_id, "Закупка разрешена членом комиссии");// Запись лога
-			// Проверяем количество положительных оценок за креатив. Если оно равно 3 - креативу присваевается статус "Принят"
-			GetGradesOnCount($pdo, $creative_id);
-			
-		}else{
-			// Если креатив Отклоняется членом комиссииии - ВСЕ результаты голосования по нему обнуляются и креативу присваиваеися статус "На доработке"
-			$stmt = $pdo->prepare("DELETE FROM сreative_grades WHERE creative_id = ?");
-			$stmt->execute(array($creative_id));
-			$infoTag = "Удалили все предыдущие записи!";
-
-			$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :a WHERE creative_id =:b");
-			$stmt->execute(array(
-				'a'=>'На доработке',
-				'b'=>$creative_id
-			));
-			WriteLog($pdo, $creative_id, $user_id, "Креатив отправлен на доработку");// Запись лога
-		}
+	}elseif($creative_grade_pos == "buy"){
+		// $stmt = $pdo->prepare("UPDATE сreative_grades SET creative_grade_pos = :creative_grade_pos WHERE creative_id = :creative_id AND user_id = :user_id");
+		$stmt = $pdo->prepare("INSERT INTO сreative_grades SET creative_grade_pos = :creative_grade_pos, creative_id = :creative_id, user_id = :user_id");
+		$stmt->execute(array(
+			'creative_grade_pos'=>$creative_grade_pos,
+			'creative_id'=>$creative_id,
+			'user_id'=>$user_id
+		));
+		WriteLog($pdo, $creative_id, $user_id, "Закупка креатива разрешена членом комиссии");// Запись лога
+		$infoTag = "Необходима закупка дизайна для данноого креатива";
 
 	}
 
 	// Запись комментариев
 	if($creative_grade_pos == "on"){	
-		$updated_content = ($creative_comment_content != "") ? "[Покупка дизайна разрешена] ". $creative_comment_content : "[Покупка дизайна разрешена]";
+		$updated_content = ($creative_comment_content != "") ? "[Дизайны разрешено не покупать] ". $creative_comment_content : "[Дизайны разрешено не покупать]";
 		$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");
 		$stmt->execute(array(
 			'user_id'=>$user_id,
@@ -120,19 +74,22 @@ if ($creative_status == "На утверждении"){
 			'creative_comment_content'=>$updated_content,
 			'creative_comment_focus'=>'positive'
 		));
-		$infoTag .= "Принят";
-	}elseif($creative_grade_pos == "off"){
-		$updated_content = ($creative_comment_content != "") ? "[".$rejectionReason."] ". $creative_comment_content : "[".$rejectionReason."]";
+		$infoTag .= "Принят без покупки";
+	}elseif($creative_grade_pos == "buy"){
+		$updated_content = ($creative_comment_content != "") ? "[Покупка дизайнов разрешена] ". $creative_comment_content : "[Покупка дизайнов разрешена]";
 		$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");
 		$stmt->execute(array(
 			'user_id'=>$user_id,
 			'creative_id'=>$creative_id,
 			'creative_comment_content'=>$updated_content,
-			'creative_comment_focus'=>'negative'
+			'creative_comment_focus'=>'positive'
 		));
-		$infoTag .= "Отправлен на доработку";
+		$infoTag .= "Необходима покупка стоковых дизайнов";
 	}
 
 	echo ">> ".$infoTag;
+
+	// Функция управления статусом креатива
+	SetCreativeStatus($pdo, $creative_id);
 }
 ?>

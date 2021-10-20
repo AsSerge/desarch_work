@@ -6,7 +6,8 @@ $array_customer_types=array(
 	'Розница',
 	'Сети',
 	'Опт',
-	'Китаева'
+	'Маркетплейс',
+	'Логотип'
 );
 $customer_types = json_encode($array_customer_types);
 
@@ -14,8 +15,10 @@ $customer_types = json_encode($array_customer_types);
 $creative_status_types=array(
 	'В задаче',
 	'В работе',
-	'На утверждении',
-	'Принят'
+	'На утверждении',	
+	'На рассмотрении',
+	'Принят',
+	'Покупка'
 );
 
 // Варианты типов разработки (принты)
