@@ -134,7 +134,7 @@ if(count($tasks)==0){
 										$stmt->execute();
 										$customers = $stmt->fetchAll(PDO::FETCH_ASSOC);
 										foreach($customers as $customer){
-											echo("<option value='{$customer['customer_id']}'>{$customer['customer_name']}</option>");
+											echo("<option value='{$customer['customer_id']}'>{$customer['customer_name']} [{$customer['customer_type']}]</option>");
 										}
 									?>
 								</select>

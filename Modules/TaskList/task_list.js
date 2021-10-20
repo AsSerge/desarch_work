@@ -79,6 +79,24 @@ $(document).ready(function () {
 		}
 	});
 
+	$("#customer_id").on("change", function () {
+
+		var customer_id = $("#customer_id").val();
+		console.log('Что-то поменяли' + customer_id);
+		$.ajax({
+			url: '/Modules/TaskList/get_task_number.php',
+			type: "post",
+			dataType: 'html',
+			data: {
+				customer_id: customer_id
+			},
+			success: function (data) {
+				console.log(data);
+				$("#task_number").val(data);
+			}
+		});
+	});
+
 
 	// Первоначальное сохранение задачи	
 	$(document).on("click", "#SaveTask", function (event) {
