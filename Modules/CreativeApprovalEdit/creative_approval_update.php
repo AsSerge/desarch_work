@@ -20,6 +20,15 @@ if($creative_grade_pos == "on"){
 		'creative_id'=>$creative_id
 		));
 		WriteLog($pdo, $creative_id, $user_id, "Креатив принят");// Запись лога
+}elseif($creative_grade_pos == "buy"){
+	$creative_end_date = date("Y-m-d");
+	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status, creative_end_date = :creative_end_date WHERE creative_id = :creative_id");
+	$stmt->execute(array(
+		'creative_status'=>'Покупка',
+		'creative_end_date'=>$creative_end_date,
+		'creative_id'=>$creative_id
+		));
+		WriteLog($pdo, $creative_id, $user_id, "Разрешена покупка дизайна руководителем");// Запись лога
 }elseif($creative_grade_pos == "off"){
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status WHERE creative_id = :creative_id");
 	$stmt->execute(array(
@@ -56,7 +65,7 @@ if($creative_grade_pos == "on"){
 		'creative_comment_content'=>$updated_content,
 		'creative_comment_focus'=>'negative'
 	));
-	$infoTag .= "Отправлен на дорпаботку";
+	$infoTag .= "Отправлен на доработку";
 }elseif($creative_grade_pos == "check"){
 	$updated_content = ($creative_comment_content != "") ? "[Креатив отправлен на согласование] ". $creative_comment_content : "[Креатив отправлен на согласование]";
 	$stmt = $pdo->prepare("INSERT INTO сreative_сomments SET user_id = :user_id, creative_id = :creative_id, creative_comment_focus = :creative_comment_focus,  creative_comment_content = :creative_comment_content");

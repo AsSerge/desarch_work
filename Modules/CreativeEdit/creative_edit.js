@@ -107,7 +107,7 @@ $(document).ready(function () {
 			creative_id: c_Id
 		},
 		success: function (data) {
-			if (data == "Принят") {
+			if (data == "Принят" || data == "Покупка") {
 				console.log("Начинаем");
 				$('#FilesDN').hide(); // Кнопка загрузки Изображения
 				$('#BaseFilesDN').hide(); // Кнопка загрузки Изображения

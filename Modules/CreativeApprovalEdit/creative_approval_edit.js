@@ -16,8 +16,10 @@
 			$('#BtnOff').removeClass();
 			$('#BtnOn').removeClass();
 			$('#BtnCheck').removeClass();
+			$('#BtnBuy').removeClass();
 			$('#BtnCheck').addClass('btn btn-outline-info');
 			$('#BtnOff').addClass('btn btn-warning');
+			$('#BtnBuy').addClass('btn btn-outline-info');
 			$('#BtnOn').addClass('btn btn-outline-success');
 			CheckAlertStatus(VoteVal);
 			// console.log(VoteVal);
@@ -27,8 +29,10 @@
 			$('#BtnOff').removeClass();
 			$('#BtnOn').removeClass();
 			$('#BtnCheck').removeClass();
+			$('#BtnBuy').removeClass();
 			$('#BtnCheck').addClass('btn btn-outline-info');
 			$('#BtnOff').addClass('btn btn-outline-warning');
+			$('#BtnBuy').addClass('btn btn-outline-info');
 			$('#BtnOn').addClass('btn btn-success');
 			CheckAlertStatus(VoteVal);
 			// console.log(VoteVal);
@@ -38,12 +42,29 @@
 			$('#BtnOff').removeClass();
 			$('#BtnOn').removeClass();
 			$('#BtnCheck').removeClass();
+			$('#BtnBuy').removeClass();
 			$('#BtnOff').addClass('btn btn-outline-warning');
 			$('#BtnOn').addClass('btn btn-outline-success');
-			$('#BtnCheck').addClass('btn btn-info');
+			$('#BtnBuy').addClass('btn btn-outline-info');
+			$('#BtnCheck').addClass('btn btn-danger');
 			CheckAlertStatus(VoteVal);
 			// console.log(VoteVal);
 		});
+
+		$('#BtnBuy').on("click", function () {
+			VoteVal = "buy";
+			$('#BtnOff').removeClass();
+			$('#BtnOn').removeClass();
+			$('#BtnCheck').removeClass();
+			$('#BtnBuy').removeClass();
+			$('#BtnOff').addClass('btn btn-outline-warning');
+			$('#BtnOn').addClass('btn btn-outline-success');
+			$('#BtnCheck').addClass('btn btn-outline-danger');
+			$('#BtnBuy').addClass('btn btn-info');
+			CheckAlertStatus(VoteVal);
+			// console.log(VoteVal);
+		});
+
 
 		// Селектор выбора причины отклонения
 		$('#rejectionReason').on("change", function () {
@@ -87,19 +108,25 @@
 			if (VoteVal == "off") {
 				$('#FTMyRadio').removeClass();
 				$('#FTMyRadio').addClass('alert alert-danger');
-				$('#FTMyRadio').html('Вы не приняли дизайн! Необходимо выбрать причину отправки на доработку из выпадающего списка. Также, вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и продолжить голосование, нажав кнопку "Отправить на доработку" этот креатив <i class="far fa-thumbs-down"></i>');
+				$('#FTMyRadio').html('Вы не приняли дизайн! Необходимо выбрать причину отправки на доработку из выпадающего списка. Также, вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и продолжить голосование, нажав кнопку "Отправить на доработку" этот креатив');
 				$('#rejectionReasonBlock').show();
 				SetButtonLable(VoteVal);
 			} else if (VoteVal == "on") {
 				$('#FTMyRadio').removeClass();
 				$('#FTMyRadio').addClass('alert alert-success');
-				$('#FTMyRadio').html('Ура! Дизайн принят! Вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и продолжить согласование, нажав кнопку "Принять дизайн" этот дизайн <i class="far fa-thumbs-down"></i>');
+				$('#FTMyRadio').html('Ура! Дизайн принят! Вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и продолжить согласование, нажав кнопку "Принять дизайн" этот дизайн');
 				$('#rejectionReasonBlock').hide();
 				SetButtonLable(VoteVal);
 			} else if (VoteVal == "check") {
 				$('#FTMyRadio').removeClass();
 				$('#FTMyRadio').addClass('alert alert-info');
-				$('#FTMyRadio').html('Вы отправляете креатив на утверждение комиссией! Вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и отправить креатив на комиссию, нажав кнопку "Отправить на комиссию" этот креатив <i class="far fa-thumbs-down"></i>');
+				$('#FTMyRadio').html('Вы отправляете креатив на утверждение комиссией! Вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и отправить креатив на комиссию, нажав кнопку "Отправить на комиссию" этот креатив');
+				$('#rejectionReasonBlock').hide();
+				SetButtonLable(VoteVal);
+			} else if (VoteVal == "buy") {
+				$('#FTMyRadio').removeClass();
+				$('#FTMyRadio').addClass('alert alert-info');
+				$('#FTMyRadio').html('Вы даете разрешение на покупку дизайна! При необходимости, вы можете оставить комметнарий <i class="far fa-comment-dots"></i> для дизайнера и отправить креатив на покупку, нажав кнопку "Разрешить покупку" для этого креатива');
 				$('#rejectionReasonBlock').hide();
 				SetButtonLable(VoteVal);
 			}
@@ -122,6 +149,10 @@
 			} else if (t == "check") {
 				$('#SendVote').show();
 				$('#SendVote').html('Отправить на комиссию');
+				$('#SendVote').prop("disabled", false);
+			} else if (t == "buy") {
+				$('#SendVote').show();
+				$('#SendVote').html('Разрешить покупку');
 				$('#SendVote').prop("disabled", false);
 			}
 

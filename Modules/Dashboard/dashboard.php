@@ -183,7 +183,7 @@ width: 4px;
 				</div>
 				<div class="dash_item__body">
 				<table class="table table-sm">
-				<tr><th>ID</th><th>Дизайнер</th><th>Принято</th><th>В работе</th><th>На доработке</th><th>На рассмотрении</th><th>На утверждении</th><th>Всего</th><th>Задачи</th></tr>
+				<tr><th>ID</th><th>Дизайнер</th><th>Принято</th><th>Покупка</th><th>В работе</th><th>На доработке</th><th>На рассмотрении</th><th>На утверждении</th><th>Всего</th><th>Задачи</th></tr>
 				<?php
 					foreach($designers as $dgr){
 						
@@ -192,6 +192,7 @@ width: 4px;
 						echo "<td>{$dgr['user_id']}</td>";
 						echo "<td>{$dgr['user_name']} {$dgr['user_surname']}</td>";
 						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='Принято креативов'>".CheckDesignerCreatives($pdo, $dgr['user_id'], 'Принят')."</td>";
+						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='В работе'>".CheckDesignerCreatives($pdo, $dgr['user_id'], 'Покупка')."</td>";
 						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='В работе'>".CheckDesignerCreatives($pdo, $dgr['user_id'], 'В работе')."</td>";
 						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='На доработке'>".CheckDesignerCreatives($pdo, $dgr['user_id'], 'На доработке')."</td>";
 						echo "<td class = 'MyTd' data-toggle='tooltip' data-placement='right' title='На рассмотрении'>".CheckDesignerCreatives($pdo, $dgr['user_id'], 'На рассмотрении')."</td>";

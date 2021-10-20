@@ -98,6 +98,13 @@ foreach($creatives as $crt){
 				$lable_title = $crt['creative_status'];
 				$lable_work_library = '';
 			break;
+		case 'Покупка':
+				$button_color = 'success';
+				$lable_work = '';
+				$lable_title = $crt['creative_status'];
+				$lable_work_library = '';
+			break;
+
 		default:
 				$button_color = 'info';
 				$lable_work = '';

@@ -12,6 +12,13 @@ $creative_id = $_GET['creative_id'];
 
 echo "<script>let creative_id = {$creative_id};\n\rlet user_id = {$user_id};</script>";
 
+// Загрузка комментария дизайнера к креативу (при наличии)
+$stmt = $pdo->prepare("SELECT creative_description FROM сreatives WHERE creative_id = ?");
+$stmt->execute(array($creative_id));
+$creative_description = $stmt->fetch(PDO::FETCH_COLUMN); 
+
+
+
 // Функция получения массива файлов-изображений из заданной папки
 function GetImagesArr($dir, $id){
 	$file = [];
@@ -87,14 +94,22 @@ $cr_files = GetImagesArr(CREATIVE_FOLDER, $creative_id);
 	
 	
 	<div class="col-md-4 mb-2">
+
+		<?php if($creative_description != ""){?>
+		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="fas fa-user-check"></i> Комментарий дизайнера</h6>
+		<div class="alert alert-primary" role="alert"><i class="fas fa-check"></i> <?=$creative_description?></div>
+		<?php }?>
+
 		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="far fa-images"></i> Блок голосования</h6>
-		<div class="alert alert-warning" id = "FTMyRadio" role="alert">Для оценки дизайна (креатива) необходимо кликнуть на переключателе, выбрав <i class="far fa-thumbs-up"></i> (Принят),<i class="fas fa-tools"></i> (На доработку) или <i class="fas fa-balance-scale-right"></i> (На комиссию).
+		<div class="alert alert-warning" id = "FTMyRadio" role="alert">Вам необходимо выбрать дальнейшую судьбу креатива, кликнув на переключателе <i class="far fa-thumbs-up"></i> (Принят), <i class="fas fa-shopping-cart"></i> (Покупка), <i class="fas fa-tools"></i> (Доработка) или <i class="fas fa-balance-scale-right"></i> (Комиссия).
+		<br> При выборе варианта <i class="fas fa-tools"></i> (Доработка), необходимо указать причину отправки на доработку в выпадающем списке.
 		<br>Если вы ходтите оставить комметнарий <span class="SetComment"><i class="far fa-comment-dots"></i></span> для дизайнера - впишите его в поле комментариев</div>
 		<form action="#">
 			<div class='p-2' style="text-align: center;">
 				<button id="BtnOn" type="button" class="btn btn-outline-success"><i class="far fa-thumbs-up"></i> Принят</button>
-				<button id="BtnOff" type="button" class="btn btn-outline-warning"><i class="fas fa-tools"></i> На доработку</button>
-				<button id="BtnCheck" type="button" class="btn btn-outline-danger"><i class="fas fa-balance-scale-right"></i> На комиссию</button>
+				<button id="BtnBuy" type="button" class="btn btn-outline-info"><i class="fas fa-shopping-cart"></i> Покупка</button>
+				<button id="BtnOff" type="button" class="btn btn-outline-warning"><i class="fas fa-tools"></i> Доработка</button>
+				<button id="BtnCheck" type="button" class="btn btn-outline-danger"><i class="fas fa-balance-scale-right"></i> Комиссия</button>
 			</div>
 
 			<style>

@@ -55,6 +55,9 @@ function GetCreativeNumbers($pdo, $task_id, $select_number){
 		case "На доработке":
 			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'На доработке'");
 			break;
+		case "Покупка":
+			$stmt = $pdo->prepare("SELECT * FROM сreatives WHERE task_id = ? AND creative_status = 'Покупка'");
+			break;
 	}
 	$stmt->execute(array($task_id));
 	return $stmt->rowCount();
@@ -66,7 +69,7 @@ if(count($tasks)==0){
 }else{
 	echo "<table class='table table-sm table-light-header' id='DT_TaskList'>";
 
-	echo "<thead><tr><th>#</th><th>#</th><th>Номер</th><th>Заказчик</th><th>Тип</th><th>Название задачи</th><th>Крайний срок</th><th>Креативов всего</th><th>Принято</th><th>В работе</th><th>На комиссии</th><th>На рассмотрении</th><th>На доработке</th></tr></thead>";
+	echo "<thead><tr><th>#</th><th>#</th><th>Номер</th><th>Заказчик</th><th>Тип</th><th>Название задачи</th><th>Крайний срок</th><th>Креативов всего</th><th>Принято</th><th>Покупка</th><th>В работе</th><th>На комиссии</th><th>На рассмотрении</th><th>На доработке</th></tr></thead>";
 
 	echo "<tbody>";
 	forEach($tasks as $task){
@@ -80,6 +83,7 @@ if(count($tasks)==0){
 		echo "<td>".mysql_to_date($task['task_deadline'])."</td>";
 		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "All")."</td>";
 		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Принят")."</td>";
+		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "Покупка")."</td>";
 		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "В работе")."</td>";
 		echo "<td>".GetCreativeNumbers($pdo, $task['task_id'], "На утверждении")."</td>";
 			if(GetCreativeNumbers($pdo, $task['task_id'], "На рассмотрении") > 0) {

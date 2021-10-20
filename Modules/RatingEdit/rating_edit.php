@@ -12,6 +12,12 @@ $creative_id = $_GET['creative_id'];
 
 echo "<script>let creative_id = {$creative_id};\n\rlet user_id = {$user_id};</script>";
 
+
+// Загрузка комментария дизайнера к креативу (при наличии)
+$stmt = $pdo->prepare("SELECT creative_description FROM сreatives WHERE creative_id = ?");
+$stmt->execute(array($creative_id));
+$creative_description = $stmt->fetch(PDO::FETCH_COLUMN);
+
 // Функция получения массива файлов-изображений из заданной папки
 function GetImagesArr($dir, $id){
 	$file = [];
@@ -87,6 +93,13 @@ $cr_files = GetImagesArr(CREATIVE_FOLDER, $creative_id);
 	
 	
 	<div class="col-md-4 mb-2">
+		
+
+		<?php if($creative_description != ""){?>
+		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="fas fa-user-check"></i> Комментарий дизайнера</h6>
+		<div class="alert alert-primary" role="alert"><i class="fas fa-check"></i> <?=$creative_description?></div>
+		<?php }?>
+
 		<h6 class="border-bottom border-gray pb-3 mb-2"><i class="far fa-images"></i> Блок голосования</h6>
 		<div class="alert alert-warning" id = "FTMyRadio" role="alert">Вам необходимо рассмотреть возможность закупки стоковых изображений. Для этого необходимо кликнуть на переключателе, выбрав <i class="far fa-thumbs-up"></i> (Разрешить покупку) или <i class="far fa-thumbs-down"></i> (Отправить на доработку).<br>Если вы ходтите оставить комметнарий <span class="SetComment"><i class="far fa-comment-dots"></i></span> для дизайнера - впишите его в поле комментариев</div>
 		<form action="#">
