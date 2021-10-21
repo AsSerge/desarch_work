@@ -129,6 +129,7 @@ if(count($tasks)==0){
 							<div class="col">
 								<select class="custom-select" id="customer_id" name="customer_id" required>
 									<?php
+										echo("<option value=''>Выберете заказчика...</option>");
 										// Получаем список существующих заказчиков
 										$stmt = $pdo->prepare("SELECT * FROM `customers` WHERE 1");
 										$stmt->execute();

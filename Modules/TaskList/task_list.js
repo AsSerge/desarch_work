@@ -58,12 +58,24 @@ $(document).ready(function () {
 
 
 	// Проверка заполненности полей формы добавления задачи: поля НОМЕР и НАЗВАНИЕ должны быть заполнены!
+	var tcustomer = "";
 	var tnumber = "";
 	var tname = "";
 
+
+	$('#customer_id').on("change", function () {
+		tcustomer = $('#customer_id').val();
+		if (tcustomer != "" && tnumber != "" && tname != "") {
+			$('#SaveTask').removeAttr('disabled');
+		} else {
+			$('#SaveTask').attr("disabled", "disabled");
+		}
+	});
+
+
 	$("#task_number").on("keyup", function () {
 		tnumber = $("#task_number").val();
-		if (tnumber != "" && tname != "") {
+		if (tnumber != "" && tname != "" && tcustomer != "") {
 			$('#SaveTask').removeAttr('disabled');
 		} else {
 			$('#SaveTask').attr("disabled", "disabled");
@@ -73,7 +85,7 @@ $(document).ready(function () {
 
 	$("#task_name").on("keyup", function () {
 		tname = $("#task_name").val();
-		if (tname != "" && tnumber != "") {
+		if (tname != "" && tnumber != "" && tcustomer != "") {
 			$('#SaveTask').removeAttr('disabled');
 		} else {
 			$('#SaveTask').attr("disabled", "disabled");
@@ -95,7 +107,7 @@ $(document).ready(function () {
 				console.log(data);
 				$("#task_number").val(data);
 				tnumber = $("#task_number").val();
-				if (tnumber != "" && tname != "") {
+				if (tnumber != "" && tname != "" && tcustomer != "") {
 					$('#SaveTask').removeAttr('disabled');
 				} else {
 					$('#SaveTask').attr("disabled", "disabled");
@@ -103,6 +115,8 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	// Очистка данных формы
 
 
 	// Первоначальное сохранение задачи	
