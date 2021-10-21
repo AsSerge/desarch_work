@@ -6,13 +6,51 @@
 			</div>
 </div>
 <div class="my-3 p-3 bg-white rounded box-shadow">
+
+
+<style>
+	.TagsList { 
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;		
+		text-decoration: none;
+		color: white;
+	}
+	.OneTag{
+		font-size: 0.7rem;
+		margin: 3px;
+		padding: 5px 10px;
+		height: 26px;
+		border-radius: 14px;
+		background-color: rgb(33, 201, 201);
+
+	}
+</style>
+
+
 <?php
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
 // Получаем список загруженных дизайнов
-$stmt = $pdo->prepare("SELECT D.design_id, D.design_name, D.design_source_url, D.design_creative_style, D.design_update, U.user_name, U.user_surname  FROM designes as D LEFT JOIN users AS U ON (D.user_id = U.user_id) WHERE 1");
+$stmt = $pdo->prepare("SELECT D.design_id, D.design_name, D.design_source_url, D.design_creative_style, D.design_update, D.design_hash_list, U.user_name, U.user_surname  FROM designes as D LEFT JOIN users AS U ON (D.user_id = U.user_id) WHERE 1");
 $stmt->execute();
 $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+// Функция вывода Хэш-тегов в красивом виде
+function GetHashList($design_hash_list){
+	if ($design_hash_list != ""){
+
+		$hash_arr = explode("|", $design_hash_list);
+		$hash_string = "<div class = 'TagsList'>";
+		foreach($hash_arr as $har){
+			$hash_string .= "<span class='OneTag'>{$har}</span>";
+		}
+		$hash_string .= "</div>";
+		return $hash_string;
+	}else{
+		return "";
+	}
+}
 // Функция получения списка файлов, входящих в дизайн и вывода из списком
 function GetFilesList($design_id){
 	$target_folder = DESIGN_FOLDER.$design_id;
@@ -80,7 +118,7 @@ function GetFilesList($design_id){
 </style>
 	<!-- <table class='table table-sm table-light-header' id='DT_DesignList'> -->
 	<table class='table table-sm' id='DT_DesignList'>
-	<thead><tr><th>#</th><th>Preview</th><th>Название</th><th>Стиль</th><th>Загрузка</th><th>Источник</th><th>Дата</th></tr></thead>
+	<thead><tr><th>#</th><th width="12%">Preview</th><th>Название</th><th>Стиль</th><th width="12%">HashTags</th><th>Загрузка</th><th>Источник</th><th>Дата</th></tr></thead>
 	<tbody>
 		<?php
 		foreach($designes as $ds){
@@ -100,6 +138,9 @@ function GetFilesList($design_id){
 
 			echo "</td>";
 			echo "<td>{$ds['design_creative_style']}</td>";
+			echo "<td>";
+			echo GetHashList($ds['design_hash_list']);
+			echo "</td>";
 			echo "<td>{$ds['user_name']} {$ds['user_surname']}</td>";
 			echo "<td>{$ds['design_source_url']}</td>";
 			echo "<td>{$ds['design_update']}</td>";

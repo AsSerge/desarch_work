@@ -28,7 +28,7 @@ $(document).ready(function () {
 	$('.myRQ').on("change", function () {
 		var h = checkAllFields();
 		console.log(h);
-		if (h < 4) {
+		if (h < 5) {
 			$('#BtnSendFilesToLibrary').attr("disabled", true);
 		} else {
 			$('#BtnSendFilesToLibrary').attr("disabled", false);
@@ -50,7 +50,7 @@ $(document).ready(function () {
 				creative_id: c_Id
 			},
 			success: function (data) {
-				console.log(data);
+				// console.log(data);
 				$('#DesignSendInfo')[0].reset(); // Сбрасываем поля формы
 				location.reload(); // Перезагрузка страницы
 			}

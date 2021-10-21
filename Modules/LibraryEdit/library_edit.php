@@ -16,8 +16,15 @@ $stmt = $pdo->prepare("SELECT * FROM designes WHERE creative_id = ?");
 $stmt->execute(array($creative_id));
 $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
+
+// Получаем все список всех хэшей для Креативов
+$stmt_hash = $pdo->prepare("SELECT * FROM hash_tags WHERE 1 ORDER BY hash_name"); // Сортировка, т.к. хэши обновляются
+$stmt_hash->execute();
+$hash_tags = $stmt_hash->fetchAll(PDO::FETCH_ASSOC);
+
 // echo "<pre>";
-// print_r($designes);
+// print_r($hash_tags);
 // echo "</pre>";
 ?>
 <!-- Библиотека -->
@@ -172,11 +179,11 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 					<div class="row">
 						<div class="col-md-12">
 							<label for="design_name">Введите название</label>
-							<input type="text" class="form-control form-control-sm myRQ" id="design_name" aria-describedby="emailHelp" name="design_name">
+							<input type="text" class="form-control form-control-sm mb-2 myRQ" id="design_name" aria-describedby="emailHelp" name="design_name">
 
 
 							<label for="design_creative_style">Введите направление дизайна</label>
-							<select class="form-control form-control-sm myRQ" id="design_creative_style" name = "design_creative_style">
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_creative_style" name = "design_creative_style">
 								<?php
 									echo "<option value=''>Выберете...</option>";
 									foreach($array_creative_style as $acs){
@@ -185,8 +192,17 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 								?>
 							</select>
 
+							<label for="design_creative_style">Выберете HASH-теги для дизайна</label>
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_hash_list" name = "design_hash_list[]" multiple>
+								<?php
+									foreach($hash_tags as $hash){
+										echo "<option value='{$hash['hash_name']}'>{$hash['hash_name']}</option>";
+									}
+								?>
+							</select>
+
 							<label for="design_source_url">Внешний ресурс</label>
-							<select class="form-control form-control-sm myRQ" id="design_source_url" name = "design_source_url">
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_source_url" name = "design_source_url">
 								<?php
 									echo "<option value=''>Выберете...</option>";
 									foreach($array_creative_source as $acsrc){
