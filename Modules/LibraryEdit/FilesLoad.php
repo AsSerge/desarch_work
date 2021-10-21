@@ -89,7 +89,17 @@ if (isset($_FILES[$input_name])) {
 	$thumb->thumbnailImage(1024, 1024, true, false); // Настройки выходного изображения
 	$thumb->writeImage($path."preview.jpg");
 	$thumb->clear();
-	$thumb->destroy(); 
+	$thumb->destroy();
+	
+
+	// Делаем файл - иконку
+	$thumb = new Imagick();
+	$thumb->readImage($path."preview.jpg");	
+	$thumb->thumbnailImage(150, 150, true, false); // Настройки выходного изображения
+	$thumb->writeImage($path."thumb_preview.jpg");
+	$thumb->clear();
+	$thumb->destroy();
+	
 
 }
 ?>

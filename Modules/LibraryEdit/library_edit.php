@@ -56,7 +56,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		$files = scandir($target_folder);
 		foreach ($files as $values){
 			// Выводим все файлы, кроме preview.jpg
-			if($values != "." AND $values != ".." AND $values != "preview.jpg"){
+			if($values != "." AND $values != ".." AND $values != "preview.jpg" AND $values != "thumb_preview.jpg"){
 
 				// Получаем расширение файла для вывода иконки
 				$fi = new SplFileInfo($values);
@@ -126,7 +126,7 @@ $designes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 				$f_size = getimagesize("./Designes/{$des['design_id']}/preview.jpg"); // Найдем размер preview.jpg
 
-				echo "		<img src = './Designes/{$des['design_id']}/preview.jpg' width = '100%' class='oneimage' big-image='./Designes/{$des['design_id']}/preview.jpg' title = '{$f_size[0]} X $f_size[1]'>";
+				echo "		<img src = './Designes/{$des['design_id']}/thumb_preview.jpg' width = '100%' class='oneimage' big-image='./Designes/{$des['design_id']}/preview.jpg' title = '{$f_size[0]} X $f_size[1]'>";
 				
 				echo "	</div>";
 				echo "	<div class='col-md-10'>";

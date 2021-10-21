@@ -19,7 +19,7 @@ function GetFilesList($design_id){
 	$files = scandir($target_folder);
 	foreach ($files as $values){
 		// Выводим все файлы, кроме preview.jpg
-		if($values != "." AND $values != ".." AND $values != "preview.jpg"){
+		if($values != "." AND $values != ".." AND $values != "preview.jpg" AND $values != "thumb_preview.jpg"){
 			// Получаем расширение файла для вывода иконки
 			$fi = new SplFileInfo($values);
 			$fe = $fi->getExtension();
@@ -88,7 +88,7 @@ function GetFilesList($design_id){
 			echo "<td>{$ds['design_id']}</td>";
 			echo "<td>";
 			if(file_exists('./Designes/'.$ds['design_id'].'/preview.jpg')){
-				echo "<img src = './Designes/{$ds['design_id']}/preview.jpg' width='200px' class='oneimage' big-image='./Designes/{$ds['design_id']}/preview.jpg'>";
+				echo "<img src = './Designes/{$ds['design_id']}/thumb_preview.jpg' width='200px' class='oneimage' big-image='./Designes/{$ds['design_id']}/preview.jpg'>";
 			}
 			echo "</td>";
 			echo "<td>";

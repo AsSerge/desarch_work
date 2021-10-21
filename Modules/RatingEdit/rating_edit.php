@@ -25,7 +25,7 @@ function GetImagesArr($dir, $id){
 	$files = scandir($sc_dir);
 	foreach ($files as $values){
 		// Выводим только файлы-изображения JPEG кроме preview.jpg
-		if($values != "." AND $values != ".." AND $values != "preview.jpg"){
+		if($values != "." AND $values != ".." AND $values != "preview.jpg" AND $values != "thumb_preview.jpg"){
 			if(exif_imagetype($sc_dir."/".$values) == IMAGETYPE_JPEG){
 				$file[] = "/Creatives/".$id."/".$values;
 			}

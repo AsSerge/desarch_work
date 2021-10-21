@@ -89,14 +89,12 @@ if (isset($_FILES[$input_name])) {
 				$name = $creative_id."_preview.jpg";
 				if (move_uploaded_file($file['tmp_name'], $path . $name)) {
 					 // Меняем размер загруженного файла
-
 					$thumb = new Imagick();
 					$thumb->readImage($path.$name);
 					$thumb->thumbnailImage(1024, 1024, true, false); // Настройки выходного изображения
 					$thumb->writeImage($path.$name);
 					$thumb->clear();
 					$thumb->destroy();
-
 					$success = 'Файл «' . $name . '» успешно загружен.';
 				} else {
 					$error = 'Не удалось загрузить файл.';
