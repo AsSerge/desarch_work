@@ -80,7 +80,8 @@ $creative_id = $_GET['creative_id'];
 				echo "<td>";
 				echo GetDisignesCount($pdo, $cr['creative_id']);
 				echo "</td>";
-				echo "<td><button type='button' class='btn btn-info btn-sm savePDF' docID = '{$cr['creative_id']}'> <i class='far fa-file-pdf'></i> PDF</button></td>";
+				// echo "<td><button type='button' class='btn btn-info btn-sm savePDF' docID = '{$cr['creative_id']}'> <i class='far fa-file-pdf'></i> PDF</button></td>";
+				echo "<td><a href = '/Modules/CreativeListView/PDF_Creation.php?creative_id={$cr['creative_id']}' type='button' class='btn btn-info btn-sm savePDF' docID = '{$cr['creative_id']}'> <i class='far fa-file-pdf'></i> PDF</a></td>";
 			echo "</tr>";
 		}
 		?>

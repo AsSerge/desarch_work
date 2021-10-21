@@ -3,7 +3,7 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
 require_once($_SERVER['DOCUMENT_ROOT']."/Assets/fpdf/fpdf.php"); // fpdf
 define('FPDF_FONTPATH', $_SERVER['DOCUMENT_ROOT'].'/Assets/fpdf/font/'); // Шрифты для fpdf
-$creative_id = "1";
+$creative_id = $_POST['creative_id'];
 
 // Получаем информацию для формирования PDF
 $stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) LEFT JOIN users AS U ON (C.user_id = U.user_id) WHERE creative_id = ?");
@@ -101,5 +101,4 @@ foreach($images as $img){
 
 //Выводим PDF в браузер
 $pdf->Output( $_SERVER['DOCUMENT_ROOT']."/report.pdf", "I" );
-
 ?>
