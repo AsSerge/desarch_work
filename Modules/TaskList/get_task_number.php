@@ -1,14 +1,13 @@
 <?php
-// Получение очередного номера
+
 include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
 // 'Розница'	    РОЗ-2021-00001
-// 'Сети'          СЕТ
+// 'Сети'          СЕТ - вставка
 // 'Опт'           ОПТ
-// 'Маркетплейс'   МПЛ
+// 'Маркетплейс'   МПЛ - вставка
 // 'Логотип'       ЛОГ
 
 $customer_id = $_POST['customer_id'];
-// Получаем тип заказчика по 
 // Получаем тип заказчика по ID
 $stmt = $pdo->prepare("SELECT customer_type FROM customers WHERE customer_id = ?");
 $stmt->execute(array($customer_id));
@@ -19,34 +18,39 @@ switch($customer_type){
 		$pref = 'РОЗ';
 		break;
 	case 'Сети':
-		$pref = 'СЕТ';
+		$pref = '';
 		break;
 	case 'Опт':
 		$pref = 'ОПТ';
 		break;
 	case 'Маркетплейс':
-		$pref = 'МПЛ';
+		$pref = '';
 		break;
 	case 'Логотип':
 		$pref = 'ЛОГ';
 		break;
 }
 
-$year = date("Y"); // Год добавления
-// Получаем номер последней добавленной задачи
-$stmt = $pdo->prepare("SELECT task_number FROM tasks WHERE customer_id = ? ORDER BY task_update");
-$stmt->execute(array($customer_id));
-$tasks = $stmt->fetchAll(PDO::FETCH_ASSOC); // Тип заказчика
+if($pref != ""){
+	$year = date("y"); // Год добавления (текущий год)
+	// Получаем номер последней добавленной задачи	
+	$stmt = $pdo->prepare("SELECT MAX(task_number) FROM tasks AS T LEFT JOIN customers AS C ON (T.customer_id = C.customer_id) WHERE customer_type = ?");
+	$stmt->execute(array($customer_type));
+	$task_number = $stmt->fetch(PDO::FETCH_COLUMN); // Тип заказчика ВРОДЕ ПОСЛЕДНЯЯ ЗАПИСЬ т.к. фильтр по убыванию
 
-
-
-
-
-
-
-
-$num = 1;	// Номер добвления
-$num_str = sprintf("%08d", $num);// Заполнитель
-echo $pref."-".$year."-".$num_str;
-
+	// Проверяем совпадение года
+	// Если год последней даты не совпадает с текущин, ставим номер очередной записи в 00001, Если нет - продолжаем годовую нумерацию
+	$last_task_year = (int)explode("-", $task_number)[1]; // Получаем год последней записи
+	$last_task_number = (int)explode("-", $task_number)[2]; // Получаем год последней записи
+	//Если год последней записи меньше текущего года
+	if($last_task_year < $year){
+		$next_task_year = date("y"); // Берем текущий (новый) год
+		$next_task_number = 1; // Ставим первый номер нового года
+	}elseif($last_task_year == $year){
+		$next_task_year = $last_task_year; // Берем год последней записи 
+		$next_task_number = $last_task_number + 1; // Увеличиваем номер последней записи на 1
+	}	
+	$num_str = sprintf("%05d", $next_task_number);// Заполнитель
+	echo $pref."-".$next_task_year."-".$num_str;
+}
 ?>

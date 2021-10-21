@@ -70,6 +70,7 @@ $(document).ready(function () {
 		}
 	});
 
+
 	$("#task_name").on("keyup", function () {
 		tname = $("#task_name").val();
 		if (tname != "" && tnumber != "") {
@@ -93,6 +94,12 @@ $(document).ready(function () {
 			success: function (data) {
 				console.log(data);
 				$("#task_number").val(data);
+				tnumber = $("#task_number").val();
+				if (tnumber != "" && tname != "") {
+					$('#SaveTask').removeAttr('disabled');
+				} else {
+					$('#SaveTask').attr("disabled", "disabled");
+				}
 			}
 		});
 	});

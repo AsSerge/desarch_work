@@ -145,7 +145,7 @@ if(count($tasks)==0){
 							<div class="col">
 								<div class="form-group">
 									<input type="text" class="form-control my-1 mr-sm-2" id="task_number" placeholder="Номер задачи" name="task_number">
-									<small id="emailHelp" class="form-text text-muted">Введите номер задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле]</span></small>
+									<small id="emailHelp" class="form-text text-muted">Введите номер задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле для Сетей и Маркетплейсов]</span></small>
 								</div>
 							</div>
 						</div>
