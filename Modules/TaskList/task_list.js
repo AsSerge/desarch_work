@@ -116,8 +116,10 @@ $(document).ready(function () {
 		});
 	});
 
-	// Очистка данных формы
-
+	// ПРИНУДИТЕЛЬНАЯ очистка полей формы добавления задачи
+	$('#BtnFormClear').on("click", function () {
+		$('#TaskSendInfo')[0].reset(); // Сбрасываем поля формы		
+	});
 
 	// Первоначальное сохранение задачи	
 	$(document).on("click", "#SaveTask", function (event) {

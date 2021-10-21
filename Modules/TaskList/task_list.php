@@ -122,7 +122,7 @@ if(count($tasks)==0){
 					</button>
 				</div>
 				<div class="modal-body">
-				<form>
+				<form id="TaskSendInfo">
 						<input type="hidden" id="add_task" value = "add_task">
 						<input type="hidden" id="user_id" value = "<?=$user_id?>">
 						<div class="row mb-2">
@@ -189,7 +189,7 @@ if(count($tasks)==0){
 						<small id="task_description_help" class="form-text text-muted">Оставьте краткое описание задачи</small>
 
 						<div class="mt-3" style="text-align: center">
-							<button type="reset" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+							<button type="reset" id="BtnFormClear" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
 							<button type="submit" class="btn btn-danger" data-dismiss="modal" id="SaveTask">Сохранить</button>
 						</div>
 					</form>
