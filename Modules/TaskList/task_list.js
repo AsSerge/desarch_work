@@ -95,7 +95,7 @@ $(document).ready(function () {
 	$("#customer_id").on("change", function () {
 
 		var customer_id = $("#customer_id").val();
-		console.log('Что-то поменяли' + customer_id);
+		// console.log('Что-то поменяли' + customer_id);
 		$.ajax({
 			url: '/Modules/TaskList/get_task_number.php',
 			type: "post",
@@ -104,8 +104,13 @@ $(document).ready(function () {
 				customer_id: customer_id
 			},
 			success: function (data) {
-				console.log(data);
+				// console.log(data);
 				$("#task_number").val(data);
+				if (data != "") {
+					$("#task_number").attr("disabled", "disabled");
+				} else {
+					$('#task_number').removeAttr('disabled');
+				}
 				tnumber = $("#task_number").val();
 				if (tnumber != "" && tname != "" && tcustomer != "") {
 					$('#SaveTask').removeAttr('disabled');
@@ -150,7 +155,7 @@ $(document).ready(function () {
 				task_description: task_description
 			},
 			success: function (data) {
-				console.log(data);
+				// console.log(data);
 				location.reload(); // Перезагрузка страницы
 			}
 		});

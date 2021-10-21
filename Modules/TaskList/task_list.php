@@ -17,9 +17,11 @@
 		content: "*";
 		color: var(--red);
 	}
+	.infoText{
+		font-size: 0.8rem;		
+	}
 </style>
 <div class="my-3 p-3 bg-white rounded box-shadow">
-
 <?php
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
 // В зависимости от уровня доступа - выводим список
@@ -146,7 +148,7 @@ if(count($tasks)==0){
 							<div class="col">
 								<div class="form-group">
 									<input type="text" class="form-control my-1 mr-sm-2" id="task_number" placeholder="Номер задачи" name="task_number">
-									<small id="emailHelp" class="form-text text-muted">Введите номер задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле для Сетей и Маркетплейсов]</span></small>
+									<small id="emailHelp" class="form-text text-muted">Введите номер задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле]*</span></small>
 								</div>
 							</div>
 						</div>
@@ -155,7 +157,7 @@ if(count($tasks)==0){
 							<div class="col">
 								<div class="form-group">
 									<input type="text" class="form-control my-1 mr-sm-2" id="task_name" placeholder="Название задачи" name="task_name">
-									<small id="emailHelp" class="form-text text-muted">Введите название задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле]</span></small>
+									<small id="emailHelp" class="form-text text-muted">Введите название задачи <span class = 'text-danger' data-toggle="tooltip" data-placement="bottom" title="Заполнять обязательно!">[обязательное поле]*</span></small>
 								</div>
 							</div>
 						</div>
@@ -187,6 +189,8 @@ if(count($tasks)==0){
 						<label for="task_description">Описание задачи</label>
 						<textarea class="form-control mb-2" id="task_description" name="task_description" rows="3"></textarea>
 						<small id="task_description_help" class="form-text text-muted">Оставьте краткое описание задачи</small>
+
+						<p class='text-danger infoText mt-3'>*Для заказчиков типа Сети и Маркетплейс необходима ручная нумерация. Для заказчиков типа Розница, Опт и Логотип - предусмотрена автонумерация задачи. Название задачи - обязательно</p>
 
 						<div class="mt-3" style="text-align: center">
 							<button type="reset" id="BtnFormClear" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
