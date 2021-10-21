@@ -1,78 +1,105 @@
 <?php
-
 include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
-// 'Розница'	    РОЗ-2021-00001
-// 'Сети'          СЕТ - вставка
-// 'Опт'           ОПТ
-// 'Маркетплейс'   МПЛ - вставка
-// 'Логотип'       ЛОГ
+include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
+require_once($_SERVER['DOCUMENT_ROOT']."/Assets/fpdf/fpdf.php"); // fpdf
+define('FPDF_FONTPATH', $_SERVER['DOCUMENT_ROOT'].'/Assets/fpdf/font/'); // Шрифты для fpdf
+$creative_id = "1";
 
-// $customer_id = $_POST['customer_id'];
-$customer_id = 7;
-// Получаем тип заказчика по ID
-$stmt = $pdo->prepare("SELECT customer_type FROM customers WHERE customer_id = ?");
-$stmt->execute(array($customer_id));
-$customer_type = $stmt->fetch(PDO::FETCH_COLUMN); // Тип заказчика
+// Получаем информацию для формирования PDF
+$stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) LEFT JOIN users AS U ON (C.user_id = U.user_id) WHERE creative_id = ?");
+$stmt->execute(array($creative_id));
+$crt = $stmt->fetch(PDO::FETCH_ASSOC);
 
-switch($customer_type){
-	case 'Розница':
-		$pref = 'РОЗ';
-		break;
-	case 'Сети':
-		$pref = '';
-		break;
-	case 'Опт':
-		$pref = 'ОПТ';
-		break;
-	case 'Маркетплейс':
-		$pref = '';
-		break;
-	case 'Логотип':
-		$pref = 'ЛОГ';
-		break;
+// Функция определения параметров заказчика
+function Customer($pdo, $customer_id){
+	$stmt = $pdo->prepare("SELECT customer_name, customer_type FROM customers WHERE customer_id = ?");
+	$stmt->execute(array($customer_id));
+	$customer = $stmt->fetch(PDO::FETCH_ASSOC);
+	return $customer;
 }
 
-if($pref != ""){
-	$year = date("y"); // Год добавления
+// Функция определения количества дизайнов в креативе
+function GetDisignesCount($pdo, $creative_id){
+	$stmt = $pdo->prepare("SELECT COUNT(*) FROM designes WHERE creative_id = ?");
+	$stmt->execute(array($creative_id));
+	$count = $stmt->fetchColumn();
+	return $count; 
+}
 
-	// Получаем номер последней добавленной задачи
-	// $stmt = $pdo->prepare("SELECT task_number FROM tasks AS T LEFT JOIN customers AS C ON (T.customer_id = C.customer_id) WHERE customer_type = ? ORDER BY T.task_update DESC");
-	$stmt = $pdo->prepare("SELECT MAX(task_number) FROM tasks AS T LEFT JOIN customers AS C ON (T.customer_id = C.customer_id) WHERE customer_type = ?");
-	$stmt->execute(array($customer_type));
-	$task_number = $stmt->fetch(PDO::FETCH_COLUMN); // Тип заказчика ВРОДЕ ПОСЛЕДНЯЯ ЗАПИСЬ т.к. фильтр по убыванию
+// Функция получения массива изображений
 
-	// Проверяем совпадение года
-	/*
-	Если год последней даты не совпадает с текущин
-	ставим номер очередной записи в 00001
-	Если нет - продолжаем годовую нумерацию
-	*/
-
-	$last_task_year = (int)explode("-", $task_number)[1]; // Получаем год последней записи
-	$last_task_number = (int)explode("-", $task_number)[2]; // Получаем год последней записи
-	//Если год последней записи меньше текущего года
-	if($last_task_year < $year){
-		$next_task_year = date("y"); // Берем текущий (новый) год
-		$next_task_number = 1; // Ставим первый номер нового года
-	}elseif($last_task_year == $year){
-		$next_task_year = $last_task_year; // Берем год последней записи 
-		$next_task_number = $last_task_number + 1; // Увеличиваем номер последней записи на 1
+function GetImagesArr($dir, $creative_id){
+	$file = [];
+	$sc_dir = $dir.$creative_id;
+	$files = scandir($sc_dir);
+	foreach ($files as $values){
+		// Выводим только файлы-изображения JPEG кроме preview.jpg
+		if($values != "." AND $values != ".." AND $values != "preview.jpg" AND $values != "thumb_preview.jpg"){
+			if(exif_imagetype($sc_dir."/".$values) == IMAGETYPE_JPEG){
+				$file[] = "/Creatives/".$creative_id."/".$values;
+			}
+		}
 	}
-	// echo $next_task_year;
-	// echo "<br>";
-	// echo $next_task_number;
-	// echo "<br>";
-
-	// echo $last_task_number;
-	// echo "<br>";
-	// $next_num = (int)explode("-", $last_task_number)[2] + 1;
-	// $next_year = (int)explode("-", $last_task_number)[1] + 1;
-	// echo $next_num;
-	// echo "<br>";
-	// echo $next_year;
-	// echo "<br>";
-	
-	$num_str = sprintf("%05d", $next_task_number);// Заполнитель
-	echo $pref."-".$next_task_year."-".$num_str;
+	return $file; 
 }
+
+
+$creative_date = mysql_to_date($crt['creative_end_date']);
+$autor = "Дизайнер: ". $crt['user_name']. " ". $crt['user_surname']; // Автор
+$creative_name = "Паспорт дизайна ". $crt['creative_name']; // Газвание креатива
+$perv_image = $_SERVER['DOCUMENT_ROOT']."/Creatives/".$creative_id."/preview.jpg"; // Главный файл
+$images = GetImagesArr($_SERVER['DOCUMENT_ROOT']."/Creatives/", $creative_id); // Базовые файлы
+$customer = "Заказчик: " . Customer($pdo, $crt['customer_id'])['customer_name'] . " (".Customer($pdo, $crt['customer_id'])['customer_type'].")";
+$link = "Источник исходных изображений: " . $crt['creative_source']; 
+$category = "Категория: " . $crt['creative_style'];
+$description = "Описание: " . $crt['creative_description'];
+
+
+//Создаем титульную страницу
+$pdf = new FPDF('L','mm','A4');
+$pdf->AddPage();
+$pdf->AddFont('Montserrat-Regular','','Montserrat-Regular.php');
+$pdf->AddFont('Montserrat-Bold','B','Montserrat-SemiBold.php');
+
+$pdf->SetFont('Montserrat-Bold','B',15);
+$pdf->SetXY(260,10);
+$pdf->Write(0,iconv('utf-8', 'windows-1251' ,$creative_date));
+
+$pdf->SetFont('Montserrat-Bold','B',15);
+$pdf->SetXY(10,10);
+$pdf->Write(0,iconv('utf-8', 'windows-1251',$creative_name));
+
+$pdf->SetFont('Montserrat-Regular','',10);
+$pdf->SetXY(10,17);
+$pdf->Write(0,iconv('utf-8', 'windows-1251', $autor));
+
+$pdf->SetFont('Montserrat-Regular','',10);
+$pdf->SetXY(10,135);
+$pdf->Write(0,iconv('utf-8', 'windows-1251', $customer));
+
+$pdf->SetFont('Montserrat-Regular','',10);
+$pdf->SetXY(10,140);
+$pdf->Write(0,iconv('utf-8', 'windows-1251', $link));
+
+$pdf->SetFont('Montserrat-Regular','',10);
+$pdf->SetXY(10,145);
+$pdf->Write(0,iconv('utf-8', 'windows-1251', $category));
+
+$pdf->SetFont('Montserrat-Regular','',10);
+$pdf->SetXY(10,150);
+$pdf->Write(5,iconv('utf-8', 'windows-1251', $description));
+
+
+
+//Вставляем картинку: путь, отступ x, отступ y, ширина картинки
+$pdf->Image($perv_image, 6, 20, 150 );
+$line = 160;
+foreach($images as $img){
+	$pdf->Image($_SERVER['DOCUMENT_ROOT'].$img, $line, 25, 50 );
+	$line += 55;
+}
+
+//Выводим PDF в браузер
+$pdf->Output( $_SERVER['DOCUMENT_ROOT']."/report.pdf", "I" );
+
 ?>

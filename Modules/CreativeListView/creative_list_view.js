@@ -39,4 +39,10 @@ $(document).ready(function () {
 			// "url": "/datafiles/dataTables.russian.json"
 		}
 	});
+
+	$('.savePDF').on("click", function () {
+		var creative_id = $(this).attr("docID");
+		console.log(creative_id);
+	});
+
 });

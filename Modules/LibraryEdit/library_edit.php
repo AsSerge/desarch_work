@@ -160,8 +160,6 @@ $hash_tags = $stmt_hash->fetchAll(PDO::FETCH_ASSOC);
 
 </div>
 
-
-
 <!-- Модальное окно Добавления дизайна -->
 <div class="modal fade modal" id="AddDesign" tabindex="-1">
 	<div class="modal-dialog">

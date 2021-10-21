@@ -42,7 +42,7 @@ $creative_id = $_GET['creative_id'];
 	}
 ?>
 <table class='table table-sm table-light-header' id="DT_CreativeList">
-	<thead><tr><th>#</th><th>Разработка</th><th>Название креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Загружено дизайнов</th></tr></thead>
+	<thead><tr><th>#</th><th>Разработка</th><th>Название креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Загружено дизайнов</th><th>PDF</th></tr></thead>
 	<tbody>
 		<?php
 		foreach($creatives as $cr){
@@ -80,6 +80,7 @@ $creative_id = $_GET['creative_id'];
 				echo "<td>";
 				echo GetDisignesCount($pdo, $cr['creative_id']);
 				echo "</td>";
+				echo "<td><button type='button' class='btn btn-info btn-sm savePDF' docID = '{$cr['creative_id']}'> <i class='far fa-file-pdf'></i> PDF</button></td>";
 			echo "</tr>";
 		}
 		?>
