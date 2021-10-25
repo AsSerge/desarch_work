@@ -45,8 +45,7 @@ function SendMailGRMP($mail, $subject, $message, $sender_mail, $sender_name){
 		$mail->AddAddress($SendAdress['mail'], $SendAdress['name']); // Адресат почтового сообщения 
 		$mail->AddReplyTo($__smtp['addreply'], $__smtp['mail_name']) ; // Альтернативный адрес для ответа 
 		$mail->SetFrom($__smtp['usermail'], $__smtp['mail_name']); // Адресант почтового сообщения
-
-		$mail->Subject = htmlspecialchars($SendAdress['subject']); // Тема письма 
+		$mail->Subject = htmlspecialchars($SendAdress['subject']); // Тема письма
 		$mail->MsgHTML($SendAdress['message']); // Текст сообщения 
 		$mail->Send();
 	//    return 1;    
