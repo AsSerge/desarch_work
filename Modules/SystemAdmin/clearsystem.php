@@ -24,6 +24,10 @@ $stmt->execute();
 $stmt = $pdo->prepare("TRUNCATE TABLE base_logs");
 $stmt->execute();
 
+$stmt = $pdo->prepare("TRUNCATE TABLE pass_recovery");
+$stmt->execute();
+
+
 // Функция очистки каталога с подкаталогами
 function unlinkRecursive($dir, $deleteRootToo){
 	if(!$dh = @opendir($dir))
