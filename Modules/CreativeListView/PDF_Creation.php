@@ -62,7 +62,7 @@ $pdf->AddFont('Montserrat-Regular','','Montserrat-Regular.php');
 $pdf->AddFont('Montserrat-Bold','B','Montserrat-SemiBold.php');
 
 $pdf->SetFont('Montserrat-Bold','B',15);
-$pdf->SetXY(260,10);
+$pdf->SetXY(250,10);
 $pdf->Write(0,iconv('utf-8', 'windows-1251' ,$creative_date));
 
 $pdf->SetFont('Montserrat-Bold','B',15);
@@ -88,7 +88,6 @@ $pdf->Write(0,iconv('utf-8', 'windows-1251', $category));
 $pdf->SetFont('Montserrat-Regular','',10);
 $pdf->SetXY(10,150);
 $pdf->Write(5,iconv('utf-8', 'windows-1251', $description));
-
 
 
 //Вставляем картинку: путь, отступ x, отступ y, ширина картинки

@@ -3,7 +3,8 @@ include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
 require_once($_SERVER['DOCUMENT_ROOT']."/Assets/fpdf/fpdf.php"); // fpdf
 define('FPDF_FONTPATH', $_SERVER['DOCUMENT_ROOT'].'/Assets/fpdf/font/'); // Шрифты для fpdf
-$creative_id = $_POST['creative_id'];
+// $creative_id = $_POST['creative_id'];
+$creative_id = 1;
 
 // Получаем информацию для формирования PDF
 $stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) LEFT JOIN users AS U ON (C.user_id = U.user_id) WHERE creative_id = ?");
@@ -62,7 +63,7 @@ $pdf->AddFont('Montserrat-Regular','','Montserrat-Regular.php');
 $pdf->AddFont('Montserrat-Bold','B','Montserrat-SemiBold.php');
 
 $pdf->SetFont('Montserrat-Bold','B',15);
-$pdf->SetXY(260,10);
+$pdf->SetXY(250,10);
 $pdf->Write(0,iconv('utf-8', 'windows-1251' ,$creative_date));
 
 $pdf->SetFont('Montserrat-Bold','B',15);
