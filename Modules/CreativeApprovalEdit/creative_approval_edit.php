@@ -10,7 +10,7 @@ require_once ($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php");
 // Получаем ID креатива
 $creative_id = $_GET['creative_id'];
 
-echo "<script>let creative_id = {$creative_id};\n\rlet user_id = {$user_id};</script>";
+echo "<script>var creative_id = {$creative_id}; \n\r var user_id = {$user_id};</script>";
 
 // Загрузка комментария дизайнера к креативу (при наличии)
 $stmt = $pdo->prepare("SELECT creative_description FROM сreatives WHERE creative_id = ?");

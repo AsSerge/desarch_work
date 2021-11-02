@@ -3,6 +3,15 @@
 include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта
 
+// Функция для получения информации о пользователе (отправка почты)
+function GetUserInfo($pdo, $user_id){
+	$stmtu = $pdo->prepare("SELECT user_login, user_name, user_surname FROM users WHERE user_id = ?");
+	$stmtu->execute(array($user_id));
+	$user_mail = $stmtu->fetch(PDO::FETCH_ASSOC);
+	return $user_mail;
+}
+
+
 if (isset($_POST['add_task']) and $_POST['add_task'] == true){
 	$user_id = $_POST['user_id'];
 	$customer_id = $_POST['customer_id'];
@@ -54,9 +63,8 @@ if (isset($_POST['add_task']) and $_POST['add_task'] == true){
 
 	$subject = 'Новое задание для разработчиков';
 	$message = 'Добрый день. Добавлено новое задание для разработчиков!';
-	$sender_mail = 'Tsvetkov-SA@grmp.ru';
-	$sender_name = 'Администратор';
-
+	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
+	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];
 	$stmt = $pdo->prepare("SELECT * FROM users WHERE user_superior = ?");
 	$stmt->execute(array($user_id));	
 	$designers = $stmt->fetchAll(PDO::FETCH_ASSOC);

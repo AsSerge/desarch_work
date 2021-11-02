@@ -23,7 +23,7 @@ function GetDesignerInfo($pdo, $creative_id){
 function GetUserInfo($pdo, $user_id){
 	$stmtu = $pdo->prepare("SELECT user_login, user_name, user_surname FROM users WHERE user_id = ?");
 	$stmtu->execute(array($user_id));
-	$user_mail = $stmtu->fetchAll(PDO::FETCH_ASSOC);
+	$user_mail = $stmtu->fetch(PDO::FETCH_ASSOC);
 	return $user_mail;
 }
 
@@ -38,6 +38,19 @@ if($creative_grade_pos == "on"){
 		'creative_id'=>$creative_id
 		));
 		WriteLog($pdo, $creative_id, $user_id, "Креатив принят");// Запись лога
+	// Отправляем письмо дизайнеру креатива о принятии креатива
+	// Отправитель: Постановщик задачи. Список получателей формируется из списка членов комиссии
+
+	include_once($_SERVER['DOCUMENT_ROOT'].'/Assets/PHPMailer/PHPMailerFunction.php');
+	
+	$subject = '[Design Library] Креатив принят!';
+	$message = 'Добрый день. Креатив принят!<br>';
+	$message .= 'C уважением, ' . GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];
+	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
+	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];	
+	
+	SendMailGRMP(GetDesignerInfo($pdo, $creative_id), $subject, $message, $sender_mail, $sender_name);
+
 }elseif($creative_grade_pos == "buy"){
 	$creative_end_date = date("Y-m-d");
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status, creative_end_date = :creative_end_date WHERE creative_id = :creative_id");
@@ -47,6 +60,21 @@ if($creative_grade_pos == "on"){
 		'creative_id'=>$creative_id
 		));
 		WriteLog($pdo, $creative_id, $user_id, "Разрешена покупка дизайна руководителем");// Запись лога
+
+	// Отправляем письмо дизайнеру креатива о разрешении покупки креатива
+	// Отправитель: Постановщик задачи. Список получателей формируется из списка членов комиссии
+
+	include_once($_SERVER['DOCUMENT_ROOT'].'/Assets/PHPMailer/PHPMailerFunction.php');
+	
+	$subject = '[Design Library] Разрешена покупка креатива!';
+	$message = 'Добрый день. Покупку креатива разрешаю!<br>';
+	$message .= 'C уважением, ' . GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];
+	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
+	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];	
+	
+	SendMailGRMP(GetDesignerInfo($pdo, $creative_id), $subject, $message, $sender_mail, $sender_name);
+
+
 }elseif($creative_grade_pos == "off"){
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status WHERE creative_id = :creative_id");
 	$stmt->execute(array(
@@ -55,28 +83,17 @@ if($creative_grade_pos == "on"){
 		));
 		WriteLog($pdo, $creative_id, $user_id, "Креатив отпрален на доработку");// Запись лога
 
-	// Отправляем письмо дизайнеру креатива
+	// Отправляем письмо дизайнеру креатива о необходимости доработки
 	// Отправитель: Постановщик задачи. Список получателей формируется из списка членов комиссии
 
 	include_once($_SERVER['DOCUMENT_ROOT'].'/Assets/PHPMailer/PHPMailerFunction.php');
-	// $mail - Адрес получателя
-	// $subject - Тема сообщения
-	// $message - Сообщение
-	// $sender_mail - Почта отправителя
-	// $sender_name - Имя отправителя
-
-	$subject = 'Новый креатив для рассмотрения!';
-	$message = 'Добрый день. Добавлен новый креатив для рассмотрения!';
-	$message .= 'Адрес для просмотра креатива: http://desarch.dmtextile.ru/';
-	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
-	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surnam'];
-		
-	SendMailGRMP(GetDesignerInfo($pdo, $creative_id), $subject, $message, $sender_mail, $sender_name);
 	
-
-
-
-
+	$subject = '[Design Library] Доработка креатива!<br>';
+	$message = 'Добрый день. Необходима дорабока креатива!';	
+	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
+	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];	
+	
+	SendMailGRMP(GetDesignerInfo($pdo, $creative_id), $subject, $message, $sender_mail, $sender_name);
 
 }elseif($creative_grade_pos == "check"){
 	$stmt = $pdo->prepare("UPDATE сreatives SET creative_status = :creative_status WHERE creative_id = :creative_id");
@@ -96,12 +113,13 @@ if($creative_grade_pos == "on"){
 	// $sender_mail - Почта отправителя
 	// $sender_name - Имя отправителя
 
-	$subject = 'Новый креатив для рассмотрения!';
-	$message = 'Добрый день. Добавлен новый креатив для рассмотрения!';
-	$message .= 'Адрес для просмотра креатива: http://desarch.dmtextile.ru/';
+	$subject = '[Design Library] Новый креатив для рассмотрения!';
+	$message = 'Добрый день. Добавлены новые креативы для рассмотрения!<br>';
+	$message .= 'Адрес для просмотра креативов: http://desarch.dmtextile.ru/';
 	$sender_mail = GetUserInfo($pdo, $user_id)['user_login'];
-	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surnam'];
-		
+	$sender_name = GetUserInfo($pdo, $user_id)['user_name']. " ". GetUserInfo($pdo, $user_id)['user_surname'];
+
+
 	$stmt = $pdo->prepare("SELECT user_login FROM users WHERE user_role = 'ctr'");
 	$stmt->execute();	
 	$members = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -109,7 +127,9 @@ if($creative_grade_pos == "on"){
 	foreach($members as $mbr){
 		SendMailGRMP($mbr['user_login'], $subject, $message, $sender_mail, $sender_name);
 	}
+	WriteLog($pdo, $creative_id, $user_id, "Отправлено сообщение членам комиссии.");// Запись лога
 }
+
 
 // Запись комментариев ПОСТАНОВЩИК ЗАДАЧИ
 if($creative_grade_pos == "on"){	

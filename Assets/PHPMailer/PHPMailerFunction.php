@@ -14,7 +14,8 @@ function SendMailGRMP($mail, $subject, $message, $sender_mail, $sender_name){
 		"mail_title" => 'Акция', // Заголовок письма
 		"mail_name" => $sender_name // Имя отправителя
 	);	
-	require_once '../../Assets/PHPMailer/PHPMailerAutoload.php';
+	require_once ($_SERVER['DOCUMENT_ROOT'].'/Assets/PHPMailer/PHPMailerAutoload.php');
+	// require_once '../../Assets/PHPMailer/PHPMailerAutoload.php';
 	$SendAdress = array(
 		'name'=>$name,
 		'mail'=>$mail,
