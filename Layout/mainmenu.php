@@ -58,6 +58,9 @@
 			<li class="nav-item">
 				<a class="nav-link" href="/index.php?module=RatingList">Список для голосования</a>
 			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="/index.php?module=HelpDesk">Помощь</a>
+			</li>
 
 			<?php } ?>
 
