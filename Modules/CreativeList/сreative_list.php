@@ -2,7 +2,7 @@
 <div class="d-flex align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow">
 			<span style="margin-right: 10px"><i class="fas fa-list-ul" style="font-size: 2.5rem;"></i></span>
 			<div class="lh-100">
-				<h6 class="mb-0 text-white lh-100">Список креативов в работе</h6>
+				<h6 class="mb-0 text-white lh-100">Список моих креативов</h6>
 				<small><?php echo $user_name." " .$user_surname. " [".$user_role_description."]";?></small>
 			</div>
 </div>
@@ -43,7 +43,13 @@ $task_id = $_GET['task_id'];
 	}
 ?>
 
-
+<style>
+	.small_image{
+		display: inline-block;
+		/* border: 1px solid #000; */
+		width: 50px;
+	}
+</style>
 <table class='table table-sm table-light-header' id='CR_CreativeList'>
 <thead><tr><th>Задача</th><th>Заказчик</th><th>Крайний срок</th><th>Креатив</th><th>Статус</th><th>Действие</th></tr></thead>
 <tbody>
@@ -54,7 +60,18 @@ foreach($creatives as $crt){
 	echo "<td>".$crt['task_name']." [".$crt['task_number']."]</td>";
 	echo "<td>".Customer($pdo, $crt['customer_id'])['customer_name']." [".Customer($pdo, $crt['customer_id'])['customer_type']."]</td>";
 	echo "<td>".mysql_to_date($crt['task_deadline'])."</td>";
-	echo "<td>".$crt['creative_name']."</td>";
+	echo "<td>";
+
+	if(file_exists($_SERVER['DOCUMENT_ROOT']."/Creatives/{$crt['creative_id']}/thumb_preview.jpg")){
+
+		// <img src = './Designes/{$ds['design_id']}/thumb_preview.jpg' width='200px' class='oneimage' big-image='./Designes/{$ds['design_id']}/preview.jpg'>
+
+		echo "<span class='small_image'><img src='/Creatives/{$crt['creative_id']}/thumb_preview.jpg' class='rounded-circle' width='30px' height='30px'></span>";
+	}else{
+		echo "<span class='small_image'></span>";
+	}	
+	echo $crt['creative_name'];
+	echo "</td>";
 	// echo "<td><a href = '/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."'>".$crt['creative_name']."</a></td>";
 	echo "<td>".$crt['creative_status']."</td>";
 	echo "<td>";
@@ -112,13 +129,14 @@ foreach($creatives as $crt){
 				$lable_work_library = 'disabled';
 	}
 		
-	echo "<button type='button' class='btn btn-warning btn-sm TakeToWork' data-creative = '".$crt['creative_id']."' {$lable_set}><i class='far fa-flag'></i></button>&nbsp;";
-	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work} data-toggle='tooltip' data-placement='bottom' title='{$lable_title}' onclick='document.location=`/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-tools'></i></button>&nbsp;";
+	// echo "<button type='button' class='btn btn-warning btn-sm TakeToWork' data-creative = '".$crt['creative_id']."' {$lable_set}><i class='far fa-flag'></i></button>&nbsp;";
 
+	// echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work} data-toggle='tooltip' data-placement='bottom' title='{$lable_title}' onclick='document.location=`/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-tools'></i></button>&nbsp;";
+	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work} data-toggle='tooltip' data-placement='bottom' title='Редактор креатива' onclick='document.location=`/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-tools'></i></button>&nbsp;";
 
 	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить дизайн в библиотеку' onclick='document.location=`/index.php?module=LibraryEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-photo-video'></i> ".GetDisignesCount($pdo, $crt['creative_id'])."</button>&nbsp;";
 
-	
+	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить исходник креатива'><i class='fas fa-paint-brush'></i></button>&nbsp;";
 
 	echo "</td>";
 	echo "</tr>";
@@ -143,5 +161,14 @@ foreach($creatives as $crt){
 	</div>
 </div>
 
-
+<!-- Отображение картинок в полный экран -->
+<div id="popup" class="popup">
+		<div class="popup__body">
+			<div class="popup__content">
+				<div class="popup__dnload"></div>
+				<div class="popup__close"></div>
+				<div class="popup__image"></div>
+			</div>
+		</div>
+</div>
 </div>

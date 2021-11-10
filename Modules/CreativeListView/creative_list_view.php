@@ -42,7 +42,7 @@ $creative_id = $_GET['creative_id'];
 	}
 ?>
 <table class='table table-sm table-light-header' id="DT_CreativeList">
-	<thead><tr><th>#</th><th>Разработка</th><th>Название креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Загружено дизайнов</th><th>PDF</th></tr></thead>
+	<thead><tr><th>#</th><th>Разработка</th><th>Название креатива</th><th>Заимстовование</th><th>Заказчик</th><th>Дизайнер</th><th>Исполнено</th><th>Статус</th><th>Дизайны</th><th>PDF</th></tr></thead>
 	<tbody>
 		<?php
 		foreach($creatives as $cr){
@@ -63,7 +63,7 @@ $creative_id = $_GET['creative_id'];
 					echo $cr['creative_development_type'] ." - ". $cr['creative_magnitude'];
 				}else{
 					echo "Собственная разработка";
-				}				
+				}
 				echo "</td>";
 				echo "<td>";
 				echo Customer($pdo, $cr['customer_id'])['customer_name'] . " (". Customer($pdo, $cr['customer_id'])['customer_type']. ")";
@@ -72,7 +72,9 @@ $creative_id = $_GET['creative_id'];
 				echo $cr['user_name'] . " " .$cr['user_surname'];
 				echo "</td>";
 				echo "<td>";
-				echo mysql_to_date($cr['creative_end_date']);
+				if($cr['creative_end_date']){
+					echo mysql_to_date($cr['creative_end_date']);
+				}
 				echo "</td>";
 				echo "<td>";
 				echo $cr['creative_status'];
