@@ -14,6 +14,7 @@ unlinkRecursive($_SERVER['DOCUMENT_ROOT'].'/Designes', false);
 $stmt = $pdo->prepare("TRUNCATE TABLE сreatives");
 $stmt->execute();
 unlinkRecursive($_SERVER['DOCUMENT_ROOT'].'/Creatives', false);
+unlinkRecursive($_SERVER['DOCUMENT_ROOT'].'/Creatives_SRC', false);
 
 $stmt = $pdo->prepare("TRUNCATE TABLE сreative_grades");
 $stmt->execute();

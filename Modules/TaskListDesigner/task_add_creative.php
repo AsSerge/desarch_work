@@ -44,8 +44,10 @@ if(isset($_POST['add_creative']) AND $_POST['add_creative'] == 'true'){
 	));
 	$creative_id = $pdo->lastInsertId(); // Возвращает номер последней добавленной записи: Необходим для создания новой папки креатива
 	// Создаем для него каталог на диске
+	// Также, создаем соответствующий каталог для хранения исходников разработки
 	if(!is_dir(CREATIVE_FOLDER.$creative_id)){ 
 		mkdir(CREATIVE_FOLDER.$creative_id, 0777);
+		mkdir(CREATIVE_SOURCE_FOLDER.$creative_id, 0777);
 	}
 
 	$MyCountSrc = GetCreativesCount($pdo, $task_id, $user_id);

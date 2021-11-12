@@ -41,6 +41,18 @@ $task_id = $_GET['task_id'];
 		$count = $stmt->fetchColumn();
 		return $count; 
 	}
+
+	// Функция определения количества файлов-разработок креатива в папке Creatives_SRC
+	function GetFileSourceCount($creative_id){
+		$files = scandir(CREATIVE_SOURCE_FOLDER.$creative_id);
+		$file_count = 0;
+		foreach ($files as $value){
+			if($value != "." AND $value != ".."){
+				$file_count++;
+			}
+		}
+		return $file_count;
+	}
 ?>
 
 <style>
@@ -135,7 +147,7 @@ foreach($creatives as $crt){
 	// echo "<button type='button' class='btn btn-{$button_color} btn-sm AddSource' data-source = '".$crt['creative_id']."' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить исходник креатива'><i class='fas fa-paint-brush'></i></button>&nbsp;";
 
 
-	echo "<button type='button' class='btn btn-{$button_color} btn-sm AddSource' data-source = '".$crt['creative_id']."' {$lable_work_library} data-toggle='modal' data-target='#AddSource'><i class='fas fa-paint-brush'></i></button>&nbsp;";
+	echo "<button type='button' class='btn btn-{$button_color} btn-sm AddSourceFiles' data-source = '".$crt['creative_id']."' {$lable_work_library} data-toggle='modal' data-target='#AddSourceFiles'><i class='fas fa-paint-brush'></i> ".GetFileSourceCount($crt['creative_id'])."</button>&nbsp;";
 	echo "</td>";
 	echo "</tr>";
 }
@@ -143,17 +155,8 @@ foreach($creatives as $crt){
 </tbody>
 </table>
 
-
-
-
-
-
-<!-- data-toggle='modal' data-target='#AddSource' -->
-
-
-
 <!-- Модальное окно Добавления дизайна -->
-<div class="modal fade modal" id="AddSource" tabindex="-1">
+<div class="modal fade modal" id="AddSourceFiles" tabindex="-1">
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
@@ -165,49 +168,16 @@ foreach($creatives as $crt){
 			<div class="modal-body">
 
 				<form id="DesignSendInfo" enctype="multipart/form-data">
-					<input type="hidden" name="user_id" value="<?=$user_id?>"> 
+					<input type="hidden" id="Cr_id">
 					<div class="row">
 						<div class="col-md-12">
-							<label for="design_name">Введите название</label>
-							<input type="text" class="form-control form-control-sm mb-2 myRQ" id="design_name" aria-describedby="emailHelp" name="design_name">
-
-
-							<label for="design_creative_style">Введите направление дизайна</label>
-							<select class="form-control form-control-sm mb-2 myRQ" id="design_creative_style" name = "design_creative_style">
-								<?php
-									echo "<option value=''>Выберете...</option>";
-									foreach($array_creative_style as $acs){
-										echo "<option value='{$acs}'>{$acs}</option>";
-									}
-								?>
-							</select>
-
-							<label for="design_creative_style">Выберете HASH-теги для дизайна</label>
-							<select class="form-control form-control-sm mb-2 myRQ" id="design_hash_list" name = "design_hash_list[]" multiple>
-								<?php
-									foreach($hash_tags as $hash){
-										echo "<option value='{$hash['hash_name']}'>{$hash['hash_name']}</option>";
-									}
-								?>
-							</select>
-
-							<label for="design_source_url">Внешний ресурс</label>
-							<select class="form-control form-control-sm mb-2 myRQ" id="design_source_url" name = "design_source_url">
-								<?php
-									echo "<option value=''>Выберете...</option>";
-									foreach($array_creative_source as $acsrc){
-										echo "<option value='{$acsrc}'>{$acsrc}</option>";
-									}
-								?>
-							</select>
-
 							<div style = "text-align: center" class = "mt-3">
 								<div class="custom-file mb-3">
 									<input type="file" class="custom-file-input myRQ" id="customFile1" lang="ru" name="file[]" multiple>
 									<label class="custom-file-label" for="customFile">Выбрать файлы</label>
 								</div>
 								<button type="reset" class="btn btn-secondary" id="BtnFormClear" data-dismiss="modal">Отмена</button>
-								<button class="btn btn-primary" type="button" id="BtnSendFilesToLibrary"><i class="far fa-save"></i> Сохранить изменения</button>
+								<button class="btn btn-primary" type="button" id="BtnSendFilesToLibrary"><i class="far fa-save"></i> Загрузить исходник</button>
 							</div>
 						</div>
 					</div>
@@ -217,9 +187,6 @@ foreach($creatives as $crt){
 		</div>
 	</div>
 </div>
-
-
-
 
 
 
