@@ -63,10 +63,7 @@ foreach($creatives as $crt){
 	echo "<td>";
 
 	if(file_exists($_SERVER['DOCUMENT_ROOT']."/Creatives/{$crt['creative_id']}/thumb_preview.jpg")){
-
-		// <img src = './Designes/{$ds['design_id']}/thumb_preview.jpg' width='200px' class='oneimage' big-image='./Designes/{$ds['design_id']}/preview.jpg'>
-
-		echo "<span class='small_image'><img src='/Creatives/{$crt['creative_id']}/thumb_preview.jpg' class='rounded-circle' width='30px' height='30px'></span>";
+		echo "<span class='small_image'><img src='/Creatives/{$crt['creative_id']}/thumb_preview.jpg' class='rounded-circle oneimage' width='30px' height='30px' big-image='./Creatives/{$crt['creative_id']}/preview.jpg?ver=".time()."' loading='lazy'></span>";
 	}else{
 		echo "<span class='small_image'></span>";
 	}	
