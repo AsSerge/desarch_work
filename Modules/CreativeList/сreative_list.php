@@ -127,14 +127,15 @@ foreach($creatives as $crt){
 	}
 		
 	// echo "<button type='button' class='btn btn-warning btn-sm TakeToWork' data-creative = '".$crt['creative_id']."' {$lable_set}><i class='far fa-flag'></i></button>&nbsp;";
-
-	// echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work} data-toggle='tooltip' data-placement='bottom' title='{$lable_title}' onclick='document.location=`/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-tools'></i></button>&nbsp;";
+	
 	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work} data-toggle='tooltip' data-placement='bottom' title='Редактор креатива' onclick='document.location=`/index.php?module=CreativeEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-tools'></i></button>&nbsp;";
 
 	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить дизайн в библиотеку' onclick='document.location=`/index.php?module=LibraryEdit&creative_id=".$crt['creative_id']."`'><i class='fas fa-photo-video'></i> ".GetDisignesCount($pdo, $crt['creative_id'])."</button>&nbsp;";
 
-	echo "<button type='button' class='btn btn-{$button_color} btn-sm' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить исходник креатива'><i class='fas fa-paint-brush'></i></button>&nbsp;";
+	// echo "<button type='button' class='btn btn-{$button_color} btn-sm AddSource' data-source = '".$crt['creative_id']."' {$lable_work_library} data-toggle='tooltip' data-placement='bottom' title='Добавить исходник креатива'><i class='fas fa-paint-brush'></i></button>&nbsp;";
 
+
+	echo "<button type='button' class='btn btn-{$button_color} btn-sm AddSource' data-source = '".$crt['creative_id']."' {$lable_work_library} data-toggle='modal' data-target='#AddSource'><i class='fas fa-paint-brush'></i></button>&nbsp;";
 	echo "</td>";
 	echo "</tr>";
 }
@@ -143,20 +144,84 @@ foreach($creatives as $crt){
 </table>
 
 
-<!-- Системные сообщения (Сохранение изменений)  -->
-<div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; left: 0; bottom: 0;">
-	<div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000" style="background-color: #ffc107">
-		<div class="toast-header">
-			<strong class="mr-auto">Системное сообщение</strong>
-			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+
+
+
+
+<!-- data-toggle='modal' data-target='#AddSource' -->
+
+
+
+<!-- Модальное окно Добавления дизайна -->
+<div class="modal fade modal" id="AddSource" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Добавление исходника к креативу</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="toast-body">
-			<p><i class="far fa-save"></i> Информация обновлена!</p>
+				</button>
+			</div>
+			<div class="modal-body">
+
+				<form id="DesignSendInfo" enctype="multipart/form-data">
+					<input type="hidden" name="user_id" value="<?=$user_id?>"> 
+					<div class="row">
+						<div class="col-md-12">
+							<label for="design_name">Введите название</label>
+							<input type="text" class="form-control form-control-sm mb-2 myRQ" id="design_name" aria-describedby="emailHelp" name="design_name">
+
+
+							<label for="design_creative_style">Введите направление дизайна</label>
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_creative_style" name = "design_creative_style">
+								<?php
+									echo "<option value=''>Выберете...</option>";
+									foreach($array_creative_style as $acs){
+										echo "<option value='{$acs}'>{$acs}</option>";
+									}
+								?>
+							</select>
+
+							<label for="design_creative_style">Выберете HASH-теги для дизайна</label>
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_hash_list" name = "design_hash_list[]" multiple>
+								<?php
+									foreach($hash_tags as $hash){
+										echo "<option value='{$hash['hash_name']}'>{$hash['hash_name']}</option>";
+									}
+								?>
+							</select>
+
+							<label for="design_source_url">Внешний ресурс</label>
+							<select class="form-control form-control-sm mb-2 myRQ" id="design_source_url" name = "design_source_url">
+								<?php
+									echo "<option value=''>Выберете...</option>";
+									foreach($array_creative_source as $acsrc){
+										echo "<option value='{$acsrc}'>{$acsrc}</option>";
+									}
+								?>
+							</select>
+
+							<div style = "text-align: center" class = "mt-3">
+								<div class="custom-file mb-3">
+									<input type="file" class="custom-file-input myRQ" id="customFile1" lang="ru" name="file[]" multiple>
+									<label class="custom-file-label" for="customFile">Выбрать файлы</label>
+								</div>
+								<button type="reset" class="btn btn-secondary" id="BtnFormClear" data-dismiss="modal">Отмена</button>
+								<button class="btn btn-primary" type="button" id="BtnSendFilesToLibrary"><i class="far fa-save"></i> Сохранить изменения</button>
+							</div>
+						</div>
+					</div>
+				</form>
+
+			</div>
 		</div>
 	</div>
 </div>
+
+
+
+
+
 
 <!-- Отображение картинок в полный экран -->
 <div id="popup" class="popup">

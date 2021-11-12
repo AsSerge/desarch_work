@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	"use strict";
 
-	// Кнопка "Взять в работу" ставит признак "В работе" для креатива и создает новую папку с ID креатива в папке Creatives
+	// ОТКЛЮЧЕНО!!! Кнопка "Взять в работу" ставит признак "В работе" для креатива и создает новую папку с ID креатива в папке Creatives
 
 	$(document).on("click", ".TakeToWork", function () {
 		var CreativeID = $(this).data('creative');
@@ -21,6 +21,12 @@ $(document).ready(function () {
 			}
 		});
 	});
+
+	$(document).on("click", ".AddSource", function(){
+		var CreativeID = $(this).data('source');
+		console.log(CreativeID);		
+	});
+
 
 
 });
