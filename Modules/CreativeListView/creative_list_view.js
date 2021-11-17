@@ -36,13 +36,33 @@ $(document).ready(function () {
 				"sNext": "Следующая",
 				"sPrevious": "Предыдущая"
 			}
-			// "url": "/datafiles/dataTables.russian.json"
 		}
 	});
 
 	$('.savePDF').on("click", function () {
 		var creative_id = $(this).attr("docID");
 		console.log(creative_id);
+	});
+	// Получение списка исходников для загрузки
+	$('.CreativeSource').on("click", function(e){
+		e.preventDefault();
+		var creative_id = $(this).attr("docID");
+		$.ajax({
+			url: '/Modules/CreativeListView/get_source_list.php',
+			type: 'post',
+			datatype: 'html',
+			data: {
+				creative_id: creative_id
+			},
+			success: function (data) {
+				var LongLine = "";
+				var source_arr = jQuery.parseJSON(data);
+				source_arr.forEach( function (entry) {
+					LongLine += "<div class='SourceItem'><a href ='/Creatives_SRC/" + creative_id + "/" + entry + "' download>" + entry + "</a></div>";
+				});
+				$('#SourceList').html(LongLine);
+			}
+		});
 	});
 
 });
