@@ -5,6 +5,8 @@ require_once($_SERVER['DOCUMENT_ROOT']."/Assets/fpdf/fpdf.php"); // fpdf
 define('FPDF_FONTPATH', $_SERVER['DOCUMENT_ROOT'].'/Assets/fpdf/font/'); // Шрифты для fpdf
 $creative_id = $_GET['creative_id'];
 
+// $creative_id = $_GET['id'];
+
 // Получаем информацию для формирования PDF
 $stmt = $pdo->prepare("SELECT * FROM сreatives as C LEFT JOIN tasks AS T ON (C.task_id = T.task_id) LEFT JOIN users AS U ON (C.user_id = U.user_id) WHERE creative_id = ?");
 $stmt->execute(array($creative_id));
@@ -46,7 +48,7 @@ function GetImagesArr($dir, $creative_id){
 
 $creative_date = mysql_to_date($crt['creative_end_date']);
 $autor = "Дизайнер: ". $crt['user_name']. " ". $crt['user_surname']; // Автор
-$creative_name = "Паспорт дизайна ". $crt['creative_name']; // Газвание креатива
+$creative_name = "Паспорт дизайна \"". $crt['creative_name']."\""; // Газвание креатива
 $perv_image = $_SERVER['DOCUMENT_ROOT']."/Creatives/".$creative_id."/preview.jpg"; // Главный файл
 $images = GetImagesArr($_SERVER['DOCUMENT_ROOT']."/Creatives/", $creative_id); // Базовые файлы
 $customer = "Заказчик: " . Customer($pdo, $crt['customer_id'])['customer_name'] . " (".Customer($pdo, $crt['customer_id'])['customer_type'].")";
@@ -55,10 +57,23 @@ $category = "Категория: " . $crt['creative_style'];
 $description = "Описание: " . $crt['creative_description'];
 
 
+// Получаем параметры картинки
+$img_prop = getimagesize($perv_image);
+$img_width = $img_prop[0]; // Ширина
+$img_height = $img_prop[1]; // Высота
+
+$max_img_width = 145; // Ширина
+$max_img_height = 145; // Высота
+
+if($img_height >= $max_img_height){
+	$set_img_height = $max_img_height;	
+}
+
+
 //Создаем титульную страницу
-$pdf = new FPDF('L','mm','A4');
-$pdf->AddPage();
-$pdf->AddFont('Montserrat-Regular','','Montserrat-Regular.php');
+$pdf = new FPDF('L','mm','A4'); //Новый объект
+$pdf->AddPage(); //Новая страница 
+$pdf->AddFont('Montserrat-Regular','','Montserrat-Regular.php'); //Подключаем 
 $pdf->AddFont('Montserrat-Bold','B','Montserrat-SemiBold.php');
 
 $pdf->SetFont('Montserrat-Bold','B',15);
@@ -67,34 +82,41 @@ $pdf->Write(0,iconv('utf-8', 'windows-1251' ,$creative_date));
 
 $pdf->SetFont('Montserrat-Bold','B',15);
 $pdf->SetXY(10,10);
-$pdf->Write(0,iconv('utf-8', 'windows-1251',$creative_name));
+$pdf->Write(0,iconv('utf-8', 'windows-1251', $creative_name));
 
 $pdf->SetFont('Montserrat-Regular','',10);
 $pdf->SetXY(10,17);
 $pdf->Write(0,iconv('utf-8', 'windows-1251', $autor));
 
+// Описание
+$indent = 114; // Отступ от картинки
+
 $pdf->SetFont('Montserrat-Regular','',10);
-$pdf->SetXY(10,135);
+$pdf->SetXY(10,$indent + 55);
 $pdf->Write(0,iconv('utf-8', 'windows-1251', $customer));
 
 $pdf->SetFont('Montserrat-Regular','',10);
-$pdf->SetXY(10,140);
+$pdf->SetXY(10,$indent + 60);
 $pdf->Write(0,iconv('utf-8', 'windows-1251', $link));
 
 $pdf->SetFont('Montserrat-Regular','',10);
-$pdf->SetXY(10,145);
+$pdf->SetXY(10,$indent + 65);
 $pdf->Write(0,iconv('utf-8', 'windows-1251', $category));
 
 $pdf->SetFont('Montserrat-Regular','',10);
-$pdf->SetXY(10,150);
+$pdf->SetXY(10,$indent + 70);
 $pdf->Write(5,iconv('utf-8', 'windows-1251', $description));
 
 
-//Вставляем картинку: путь, отступ x, отступ y, ширина картинки
-$pdf->Image($perv_image, 6, 20, 150 );
+//Вставляем картинку: путь, отступ x, отступ y, ширина картинки, высота картинки
+// $pdf->Image($perv_image, 6, 20, 120, 120 );
+
+$pdf->Image($perv_image, 10, 20, $set_img_width, $set_img_height );
+
+
 $line = 160;
 foreach($images as $img){
-	$pdf->Image($_SERVER['DOCUMENT_ROOT'].$img, $line, 25, 50 );
+	$pdf->Image($_SERVER['DOCUMENT_ROOT'].$img, $line, 20, 50 );
 	$line += 55;
 }
 
