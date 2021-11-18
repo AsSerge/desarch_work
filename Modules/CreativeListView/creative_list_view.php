@@ -6,6 +6,11 @@
 			</div>
 </div>
 <div class="my-3 p-3 bg-white rounded box-shadow">
+<style>
+	.SourceItem span{
+		margin: 15px;
+	}
+</style>
 
 <?php
 include_once($_SERVER['DOCUMENT_ROOT']."/Layout/settings.php"); // Функции сайта

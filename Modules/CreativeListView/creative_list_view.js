@@ -58,11 +58,47 @@ $(document).ready(function () {
 				var LongLine = "";
 				var source_arr = jQuery.parseJSON(data);
 				source_arr.forEach( function (entry) {
-					LongLine += "<div class='SourceItem'><a href ='/Creatives_SRC/" + creative_id + "/" + entry + "' download>" + entry + "</a></div>";
+					LongLine += "<div class='SourceItem'>" + GetFileIcon(entry) + "<a href ='/Creatives_SRC/" + creative_id + "/" + entry + "' download>" + entry + "</a></div>";
 				});
 				$('#SourceList').html(LongLine);
 			}
 		});
 	});
-
 });
+
+// Функция вывода пиктограммы типа файла в зависимости от расширения
+function GetFileIcon(fileName){
+	var fileExt = fileName.split('.').pop(); //Отделяем расширение
+	switch(fileExt){
+		case 'ai':
+			fileImg = 'Ai.svg';
+			break;
+		case 'eps':
+			fileImg = 'Eps.svg';
+			break;
+		case 'gif':
+			fileImg = 'Gif.svg';
+			break;
+		case 'jpg':
+			fileImg = 'Jpg.svg';
+			break;
+		case 'jpeg':
+			fileImg = 'Jpg.svg';
+			break;
+		case 'png':
+			fileImg = 'Png.svg';
+			break;
+		case 'svg':
+			fileImg = 'Svg.svg';
+			break;
+		case 'zip':
+			fileImg = 'Zip.svg';
+			break;
+		case 'cdr':
+			fileImg = 'Cdr.svg';
+			break;
+		default:
+			fileImgg = 'Fil.svg';
+	}	
+	return '<span><img src="/images/icons/'+ fileImg +'" width="20px"></span>' ;
+}
