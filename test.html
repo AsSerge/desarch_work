@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Тестирование JS</title>
+	<style>
+		#thisSell {
+			padding: 5px;
+			border: 1px solid #000;
+			border-radius: 5px;
+			width: 200px;
+		}		
+	</style>
+</head>
+<body>
+
+	<select id="thisSell">
+		<option value="">Все...</option>
+		<option value="2">Пункт 2</option>
+		<option value="3">Пункт 3</option>
+		<option value="4">Пункт 4</option>
+		<option value="5">Пункт 5</option>
+		<option value="6">Пункт 6</option>
+		<option value="7">Пункт 7</option>
+	</select>
+
+	<div id="ThisPlace"></div>
+
+	<script src = "/js/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			GetTableInfo("");
+			$('#thisSell').on("change", function(){
+				var customer_id = $('#thisSell').val();
+				GetTableInfo(customer_id);
+			});
+			$('.oneName').on("click", function(){
+				var customer_id = $('#thisSell').val();
+				GetTableInfo(customer_id);
+			});
+		});
+				
+		// Функция получение информации о клиенте
+		function GetTableInfo(customer_id){
+			$.ajax({
+				url: 'test.php',
+				type: 'post',
+				datatype: 'html',
+				data: {
+					customer_id: customer_id
+				},
+				success: function (data) {
+					var hash_arr = jQuery.parseJSON(data);
+					var LongLine = "<table>";
+					hash_arr.forEach(function(item){
+						LongLine += `<tr><td>${item['customer_id']}</td><td class='oneName'>${item['customer_name']}</td><td>${item['customer_type']}</td><td>${item['customer_description']}</td></tr>`
+					});
+					LongLine += "</table>";
+					$('#ThisPlace').html(LongLine); //Заполняем тегами варианты
+				}
+			})
+		}
+	</script>
+
+</body>
+</html>
