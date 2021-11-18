@@ -61,6 +61,9 @@ $task_id = $_GET['task_id'];
 		/* border: 1px solid #000; */
 		width: 50px;
 	}
+	.SourceItem span{
+		margin: 15px;
+	}
 </style>
 <table class='table table-sm table-light-header' id='CR_CreativeList'>
 <thead><tr><th>Задача</th><th>Заказчик</th><th>Крайний срок</th><th>Креатив</th><th>Статус</th><th>Действие</th></tr></thead>
@@ -169,6 +172,7 @@ foreach($creatives as $crt){
 
 				<form id="DesignSendInfo" enctype="multipart/form-data">
 					<input type="hidden" id="Cr_id">
+					<div id="SourceList"></div>	
 					<div class="row">
 						<div class="col-md-12">
 							<div style = "text-align: center" class = "mt-3">
