@@ -13,5 +13,4 @@ $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //Возарвщеаем использованные теги
 echo json_encode($result);
-
 ?>
