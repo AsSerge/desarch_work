@@ -7,42 +7,122 @@
 	<title>VUE (Lesson 03)</title>
 	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+	<style>
+		table{
+			border-collapse: collapse;
+		}
+		td{
+			border: 1px solid #000;
+			padding: .3rem;
+		}
+		select{
+			padding: .3rem;
+			margin-bottom: .5rem;
+			width: 400px;
+		}
+	</style>
 </head>
 <body>
-	<h1>Тестируем VUE</h1>
-	<div id="app">		
-		<button type='button' @click="getProviders">Получить Поставщиков</button>
-		<ul>
-			<li v-for="provider in providers">{{provider.customer_name}}</li>
-		</ul>
+	<h1>Тестируем VUE + PHP (на сервере)</h1>
 
+	<div id="app">
+		<!-- <select v-model="textSearch" v-on:change="SelValue">
+			<option value="">Все</option>
+			<option value="Опт">Опт</option>
+			<option value="Сети">Сети</option>
+			<option value="Розница">Розница</option>
+			<option value="Логотип">Логотип</option>
+		</select> -->
+		
+		<select v-model="filter">
+			<option value="all">Все</option>
+			<option value="Опт">Опт</option>
+			<option value="Сети">Сети</option>
+			<option value="Розница">Розница</option>
+			<option value="Логотип">Логотип</option>
+		</select>
+
+		<table>
+			<!-- <tr v-for="(provider, index) in providers"><td>{{index}}</td><td>{{provider.customer_name}}</td><td>{{provider.customer_type}}</td><td>{{provider.customer_update}}</td></tr> -->
+			<!-- <tr v-for="(provider, index) in filtredProviders"><td>{{index}}</td><td>{{provider.customer_id}}</td><td>{{provider.customer_name}}</td><td>{{provider.customer_type}}</td><td>{{provider.customer_update}}</td></tr> -->
+			<tr v-for="(provider, index) in filtredProviders"><td>{{index}}</td><td>{{provider.customer_id}}</td><td><a :href="`/Provider/test?id=${provider.customer_id}`">{{provider.customer_name}}</a></td><td>{{provider.customer_type}}</td><td>{{provider.customer_update}}</td></tr>
+		</table>
+
+		<hr>
+
+		<table>
+			<tr v-for="(provider, index) in providers"><td>{{index}}</td><td>{{provider.customer_id}}</td><td>{{provider.customer_name}}</td><td>{{provider.customer_type}}</td><td>{{provider.customer_update}}</td></tr>
+		</table>
 
 	</div>
 
 <script>
-
 var app = new Vue({
 	el: '#app',
 	name: "Serge",
-	data: {		
+	data: {
 		providers: [],
+		filtredProviders: [],
+		textSearch: '',
+		filter: 'all',
 		url:{
-			prov: 'http://localhost:5500/test.php'
+			prov: 'test.php'
 		}
 	},
 	created: function(){
-		
+		axios.get(
+			this.url.prov,
+			{
+				params:{
+					textSearch: this.textSearch
+				}
+			}
+		).then((responce)=>{
+			// console.log(responce.data);
+			this.filtredProviders = this.providers = responce.data; // Присваиваем полученные данные массиву и фильтруемому массиву			
+		});
+
 	},
-	methods:{
-		getProviders(){
-			axios.get(this.url.prov).then((responce)=>{
+	watch:{
+		filter(value){
+			switch(value){
+				case 'all':
+					this.filtredProviders = this.providers;
+					break;
+				case 'Опт':
+					this.filtredProviders = this.providers.filter(t => t.customer_type === 'Опт' );
+					break;
+				case 'Розница':
+					this.filtredProviders = this.providers.filter(t => t.customer_type === 'Розница' );
+					break;
+				case 'Сети':
+					this.filtredProviders = this.providers.filter(t => t.customer_type === 'Сети' );
+					break;
+				case 'Логотип':
+					this.filtredProviders = this.providers.filter(t => t.customer_type === 'Логотип' );
+					break;
+				default:
+					this.filtredProviders = this.providers;
+					break;
+			}
+		}
+	},
+	methods:{ // Получение данных с сервера с параметрами, передаваемыми GET
+		SelValue: function(){
+			axios.get(
+				this.url.prov,
+				{
+					params:{
+						textSearch: this.textSearch // Параметры
+					}
+				}
+			).then((responce)=>{
 				console.log(responce.data);
 				this.providers = responce.data;
 			});
 		}
 	}
-})
+});
 </script>
 </body>
 </html>

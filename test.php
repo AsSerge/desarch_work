@@ -1,10 +1,10 @@
 <?php
 include_once($_SERVER['DOCUMENT_ROOT']."/Login/classes/dbconnect.php"); //$pdo
-$customer_id = $_POST['customer_id'];
+$textSearch = $_GET['textSearch'];
 
-if ($customer_id != ""){
-	$stmt = $pdo->prepare("SELECT * FROM customers WHERE customer_id = ?");
-	$stmt->execute(array($customer_id));
+if ($textSearch != ""){
+	$stmt = $pdo->prepare("SELECT * FROM customers WHERE customer_type = ?");
+	$stmt->execute(array($textSearch));
 }else{
 	$stmt = $pdo->prepare("SELECT * FROM customers WHERE 1");
 	$stmt->execute();
