@@ -18,6 +18,7 @@
 </style>
 
 
+
 <div class="my-3 p-3 bg-white rounded box-shadow">
 	<div class="row">
 		<div class="col-md-3">
@@ -37,7 +38,7 @@
 					<a href="#" class="OneDot" data-source="hd_сreative_grades.php">Рассмотрение креатива</a>
 				</div>
 				<div class="m-3">
-					<a href="#" class="OneDot" data-source="hd_сreative_grades_commission.php">Разрешение на покупку - Комиссия</a>
+					<a href="#" class="OneDot" data-source="hd_сreative_grades_commission.php">Разрешение на покупку - (Комиссия)</a>
 				</div>
 				<div class="m-3">
 					<a href="#" class="OneDot" data-source="hd_file_formats.php">Форматы файлов</a>
